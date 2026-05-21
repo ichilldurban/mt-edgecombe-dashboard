@@ -3,245 +3,672 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mount Edgecombe Country Club — Estimate Dashboard</title>
+<title>ME 421 — Mount Edgecombe Country Club · Elemental Cost Estimate</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f5f5f5;
+  /* Mount Edgecombe Country Club palette */
+  --green: #28503c;
+  --green-d: #1d3d2d;
+  --green-dd: #14291f;
+  --green-l: #4a7560;
+  --green-tint: #e8efea;
+  --teal: #8cb4c8;
+  --teal-d: #6890a4;
+  --teal-tint: #eaf1f5;
+
+  /* DF Strang accent */
+  --yellow: #dcdc28;
+  --yellow-d: #b8b820;
+
+  /* Vision / neutrals */
+  --black: #0a0a0a;
+  --ink: #1f2d2a;
+  --ink-2: #4a5b56;
+  --muted: #8a9994;
+
+  --bg: #f6f3ec;
   --card: #ffffff;
-  --elevated: #f8f8f8;
-  --inset: #f0f0f0;
-  --border: #e5e5e5;
-  --border-b: #d5d5d5;
-  --text: #2d2d2d;
-  --text2: #555555;
-  --muted: #888888;
-  --gold: #c8a84e;
-  --gold-d: rgba(200,168,78,0.1);
-  --navy: #1f2d3d;
-  --navy-d: rgba(31,45,61,0.08);
-  --green: #16a34a;
-  --green-d: rgba(22,163,74,0.08);
-  --red: #dc2626;
-  --indigo: #4a5568;
-  --r: 8px;
-  --rs: 4px;
+  --elevated: #fafaf6;
+  --border: #e5e2d8;
+  --border-d: #d2cec0;
+
+  --r: 6px;
+  --rs: 3px;
   --t: 0.2s ease;
-  --header-bg: #1f2d3d;
-  --header-bg2: #15202b;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+html, body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+  min-height: 100vh;
+}
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: rgba(40,80,60,0.25); border-radius: 4px; }
 
-/* ===== HEADER ===== */
-.header {
-  background: linear-gradient(135deg, var(--header-bg) 0%, var(--header-bg2) 100%);
-  color: #fff;
-  padding: 18px 28px;
+/* ============================================================
+   TOP STRIP — Metric Edge identity bar
+   ============================================================ */
+.top-strip {
+  background: var(--green-dd);
+  color: rgba(255,255,255,0.85);
+  padding: 9px 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
+  font-size: 0.7rem;
+  letter-spacing: 0.4px;
+  border-bottom: 2px solid var(--yellow);
+}
+.top-strip .me-id { font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase; color: #fff; }
+.top-strip .me-sub { color: rgba(255,255,255,0.55); font-size: 0.66rem; margin-top: 1px; letter-spacing: 0.6px; }
+.top-strip .doc-ref { text-align: right; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+.top-strip .doc-ref .doc-type { color: var(--yellow); font-size: 0.62rem; }
+.top-strip .doc-ref .doc-no { color: #fff; font-size: 0.78rem; margin-top: 1px; }
+
+/* ============================================================
+   TITLE BANNER — large brand statement
+   ============================================================ */
+.banner {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-d) 100%);
+  color: #fff;
+  padding: 42px 28px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.banner::before {
+  content: '';
+  position: absolute;
   top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  right: -120px;
+  width: 380px;
+  height: 100%;
+  background: radial-gradient(circle, rgba(140,180,200,0.18) 0%, transparent 70%);
+  pointer-events: none;
 }
-.header-left { display: flex; align-items: center; gap: 18px; }
-.header-left .logo-box { height: 56px; width: 56px; border-radius: 6px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.06); padding: 4px; overflow: hidden; }
-.header-left .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
-.header-left h1 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.3px; line-height: 1.15; }
-.header-left .sub { font-size: 0.72rem; color: rgba(255,255,255,0.55); margin-top: 3px; letter-spacing: 0.2px; }
-.header-right { display: flex; align-items: center; gap: 18px; }
-.header-right .contractor-tag { text-align: right; font-size: 0.66rem; color: rgba(255,255,255,0.5); letter-spacing: 0.8px; text-transform: uppercase; }
-.header-right .contractor-name { font-size: 0.82rem; color: rgba(255,255,255,0.9); font-weight: 600; margin-top: 2px; letter-spacing: 0.1px; }
-.header-right .logo-box { height: 48px; min-width: 80px; border-radius: 6px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.9); padding: 4px 10px; }
-.header-right .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
+.banner .banner-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+.banner .eyebrow { font-size: 0.68rem; letter-spacing: 3px; text-transform: uppercase; color: var(--teal); font-weight: 700; margin-bottom: 10px; }
+.banner h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.banner .works {
+  font-size: 0.98rem;
+  color: rgba(255,255,255,0.78);
+  font-weight: 400;
+  letter-spacing: 0.1px;
+  max-width: 720px;
+}
+.banner .accent-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 96px;
+  height: 4px;
+  background: var(--yellow);
+}
 
-/* ===== CONTEXT STRIP ===== */
-.context {
-  background: #fff;
+/* ============================================================
+   CONTENT
+   ============================================================ */
+.content { max-width: 1280px; margin: 0 auto; padding: 28px; }
+
+/* ============================================================
+   PROJECT METADATA — document-style grid
+   ============================================================ */
+.meta-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(40,80,60,0.05);
+}
+.meta-card .meta-h {
+  padding: 12px 22px;
+  background: var(--green);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--yellow);
+}
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.meta-item {
+  padding: 16px 22px;
+  border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  padding: 14px 28px;
-  display: flex;
-  gap: 28px;
-  flex-wrap: wrap;
-  font-size: 0.78rem;
 }
-.context-item { display: flex; flex-direction: column; gap: 2px; }
-.context-item .label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 600; }
-.context-item .value { font-size: 0.86rem; color: var(--text); font-weight: 600; }
+.meta-item:nth-child(4n) { border-right: none; }
+.meta-item.span2 { grid-column: span 2; }
+.meta-item.span3 { grid-column: span 3; }
+.meta-item.span4 { grid-column: span 4; border-right: none; }
+.meta-item .label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); font-weight: 700; margin-bottom: 5px; }
+.meta-item .value { font-size: 0.92rem; color: var(--ink); font-weight: 600; line-height: 1.35; }
+.meta-item .value .accent { color: var(--green); font-weight: 800; }
 
-/* ===== CONTENT ===== */
-.content { max-width: 1400px; margin: 0 auto; padding: 24px 28px 60px; }
+/* ============================================================
+   STAKEHOLDER STRIP — Client / Designer / Contractor logos
+   ============================================================ */
+.stakeholders {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.stake {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(40,80,60,0.05);
+  transition: all var(--t);
+}
+.stake:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(40,80,60,0.08); }
+.stake .role { font-size: 0.62rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.stake .logo-wrap { height: 72px; display: flex; align-items: center; justify-content: center; width: 100%; padding: 4px 8px; }
+.stake .logo-wrap img { max-height: 100%; max-width: 100%; object-fit: contain; }
+.stake .logo-wrap.dark-bg { background: var(--black); border-radius: 4px; }
+.stake .name { font-size: 0.92rem; font-weight: 700; color: var(--ink); letter-spacing: -0.1px; }
+.stake .sub { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
 
-/* ===== CARDS ===== */
-.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 18px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-.card-h { padding: 14px 22px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; background: var(--elevated); }
-.card-h h2 { font-size: 0.92rem; font-weight: 700; color: var(--text); letter-spacing: -0.1px; }
+/* ============================================================
+   METRIC CARDS
+   ============================================================ */
+.mg {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.m {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(40,80,60,0.05);
+}
+.m::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--teal); }
+.m.green::before { background: var(--green); }
+.m.yellow::before { background: var(--yellow); }
+.m.dark::before { background: var(--ink); }
+.m-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); margin-bottom: 8px; font-weight: 700; }
+.m-value { font-size: 1.55rem; font-weight: 800; letter-spacing: -0.6px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.m-sub { font-size: 0.68rem; color: var(--muted); margin-top: 4px; font-weight: 500; }
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(40,80,60,0.05);
+}
+.card-h {
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: var(--elevated);
+}
+.card-h h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.2px;
+}
 .card-h .h-sub { font-size: 0.7rem; color: var(--muted); font-weight: 500; }
 .card-b { padding: 22px; }
 
-/* ===== METRIC CARDS ===== */
-.mg { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 22px; }
-.m { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 20px 22px; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-.m::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; }
-.m.gold::before { background: linear-gradient(90deg, var(--gold), transparent 80%); }
-.m.navy::before { background: linear-gradient(90deg, var(--navy), transparent 80%); }
-.m.green::before { background: linear-gradient(90deg, var(--green), transparent 80%); }
-.m.indigo::before { background: linear-gradient(90deg, var(--indigo), transparent 80%); }
-.m-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1.1px; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
-.m-value { font-size: 1.55rem; font-weight: 800; letter-spacing: -0.6px; color: var(--text); }
-.m-sub { font-size: 0.68rem; color: var(--muted); margin-top: 4px; font-weight: 500; }
-
-/* ===== SPLIT (chart + table) ===== */
-.split { display: grid; grid-template-columns: minmax(280px, 360px) 1fr; gap: 18px; margin-bottom: 18px; }
-@media (max-width: 980px) { .split { grid-template-columns: 1fr; } }
-.chart-wrap { position: relative; height: 320px; padding: 14px 4px; }
-
-/* ===== TABLES ===== */
-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+/* ============================================================
+   TABLES
+   ============================================================ */
+table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
 th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
-th { background: var(--inset); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); font-weight: 700; }
+th {
+  background: var(--green-tint);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--green-d);
+  font-weight: 800;
+  border-bottom: 2px solid var(--green);
+}
 td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 td.c, th.c { text-align: center; }
-tr.section-row td { background: var(--gold-d); font-weight: 700; color: var(--text); }
-tr.subsection-row td { background: var(--navy-d); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--navy); padding: 9px 14px; }
-tr.total-row td { background: var(--navy); color: #fff; font-weight: 800; font-size: 0.92rem; border-bottom: none; }
-tr.subtotal-row td { background: #f1f1f1; font-weight: 700; color: var(--text); }
-tr.vat-row td { background: #fafafa; color: var(--text2); font-weight: 600; }
+tr.subtotal-row td { background: var(--green-tint); font-weight: 800; color: var(--green-d); border-top: 2px solid var(--green); }
+tr.vat-row td { background: #f1ede0; color: var(--ink-2); font-weight: 600; }
+tr.total-row td {
+  background: var(--green);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  border-bottom: none;
+  border-top: 2px solid var(--yellow);
+}
 tr:last-child td { border-bottom: none; }
-.bar-cell { position: relative; padding-right: 14px; min-width: 90px; }
-.bar-cell .bar-fill { position: absolute; left: 0; bottom: 2px; height: 3px; background: var(--gold); border-radius: 2px; opacity: 0.8; }
+.bar-cell { position: relative; padding-right: 14px; }
+.bar-cell .bar-fill {
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  height: 3px;
+  border-radius: 2px;
+  opacity: 0.85;
+}
 
-/* ===== SECTION ACCORDION ===== */
-.section { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-.section-head { padding: 14px 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: background var(--t); user-select: none; }
+/* ============================================================
+   SUPPLIER TAGS — coloured chips per supplier
+   ============================================================ */
+.sup-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border-radius: 3px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+.sup-tag::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   SPLIT (chart pair)
+   ============================================================ */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+@media (max-width: 980px) { .split { grid-template-columns: 1fr; } }
+.chart-wrap { position: relative; height: 320px; padding: 14px 4px; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px 16px; padding: 8px 4px 4px; }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.72rem; color: var(--ink-2); }
+.legend-item .dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+/* ============================================================
+   SECTION ACCORDION
+   ============================================================ */
+.section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(40,80,60,0.04);
+}
+.section-head {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: background var(--t);
+  user-select: none;
+}
 .section-head:hover { background: var(--elevated); }
-.section-head .badge { width: 38px; height: 38px; border-radius: 8px; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.78rem; flex-shrink: 0; letter-spacing: -0.2px; }
-.section-head .title { flex: 1; font-size: 0.95rem; font-weight: 700; color: var(--text); }
-.section-head .amount { font-size: 1rem; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.3px; }
-.section-head .rate { font-size: 0.7rem; color: var(--muted); margin-left: 12px; font-weight: 600; font-variant-numeric: tabular-nums; min-width: 100px; text-align: right; }
-.section-head .pct { font-size: 0.7rem; color: var(--muted); margin-left: 12px; font-weight: 600; min-width: 56px; text-align: right; }
-.section-head .arrow { color: var(--muted); transition: transform var(--t); margin-left: 12px; font-size: 0.7rem; }
+.section-head .badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  background: var(--green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 0.78rem;
+  flex-shrink: 0;
+  letter-spacing: -0.2px;
+}
+.section-head .title {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.section-head .meta-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-left: 10px; }
+.section-head .amount { font-size: 1rem; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.3px; margin-left: 14px; }
+.section-head .rate { font-size: 0.7rem; color: var(--muted); margin-left: 10px; font-weight: 600; font-variant-numeric: tabular-nums; min-width: 110px; text-align: right; }
+.section-head .pct { font-size: 0.7rem; color: var(--muted); margin-left: 10px; font-weight: 600; min-width: 52px; text-align: right; }
+.section-head .arrow { color: var(--muted); transition: transform var(--t); margin-left: 12px; font-size: 0.65rem; }
 .section.open .section-head .arrow { transform: rotate(180deg); }
-.section.open .section-head { background: var(--elevated); border-bottom: 1px solid var(--border); }
+.section.open .section-head { background: var(--green-tint); border-bottom: 1px solid var(--green); }
+.section.open .section-head .title { color: var(--green-d); }
 .section-body { display: none; }
 .section.open .section-body { display: block; }
 
-/* ===== LEGEND ===== */
-.legend { display: flex; flex-wrap: wrap; gap: 10px; padding: 4px 4px 14px; }
-.legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.72rem; color: var(--text2); }
-.legend-item .dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+/* ============================================================
+   NOTES CARD
+   ============================================================ */
+.notes-card {
+  background: linear-gradient(180deg, #fdfcf6 0%, #faf8ee 100%);
+  border: 1px solid var(--border-d);
+  border-left: 4px solid var(--yellow);
+}
+.notes-list { padding: 6px 4px; }
+.notes-list li {
+  list-style: none;
+  padding: 9px 0 9px 30px;
+  position: relative;
+  font-size: 0.84rem;
+  color: var(--ink-2);
+  line-height: 1.55;
+  border-bottom: 1px dashed var(--border);
+}
+.notes-list li:last-child { border-bottom: none; }
+.notes-list li::before {
+  content: counter(note-counter);
+  counter-increment: note-counter;
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  font-size: 0.66rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.notes-list { counter-reset: note-counter; }
 
-/* ===== FOOTER ===== */
-footer { text-align: center; padding: 24px; font-size: 0.7rem; color: var(--muted); }
-footer .me-mark { font-weight: 600; color: var(--text2); }
+/* ============================================================
+   SIGNATURE BLOCK
+   ============================================================ */
+.sig-block {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 28px 26px;
+  margin-bottom: 22px;
+  box-shadow: 0 1px 3px rgba(40,80,60,0.05);
+}
+.sig-block .sig-h { font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--green); font-weight: 800; margin-bottom: 18px; }
+.sig-block .sig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 16px; }
+.sig-block .sig-line { display: flex; flex-direction: column; gap: 4px; }
+.sig-block .sig-line .lbl { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 700; }
+.sig-block .sig-line .underscore { border-bottom: 1.5px solid var(--ink); height: 32px; }
+.sig-block .sig-foot { font-size: 0.78rem; color: var(--ink-2); font-style: italic; padding-top: 12px; border-top: 1px solid var(--border); }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 720px) {
-  .header { padding: 14px 16px; flex-direction: column; align-items: flex-start; gap: 12px; }
-  .header-right { width: 100%; justify-content: flex-end; }
-  .context { padding: 12px 16px; gap: 16px; }
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: var(--green-dd);
+  color: rgba(255,255,255,0.65);
+  padding: 30px 28px 22px;
+  margin-top: 30px;
+}
+footer .foot-inner { max-width: 1280px; margin: 0 auto; }
+footer .foot-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(220,220,40,0.5) 50%, transparent 100%);
+  margin-bottom: 22px;
+}
+footer .foot-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: center;
+}
+footer .foot-id { font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #fff; font-size: 0.86rem; }
+footer .foot-sub { font-size: 0.7rem; margin-top: 4px; letter-spacing: 0.5px; color: rgba(255,255,255,0.5); }
+footer .foot-meta { text-align: right; font-size: 0.7rem; letter-spacing: 0.4px; }
+footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 880px) {
+  .top-strip { padding: 8px 16px; font-size: 0.62rem; }
+  .banner { padding: 30px 18px 26px; }
+  .banner h1 { font-size: 1.6rem; }
+  .banner .works { font-size: 0.86rem; }
   .content { padding: 16px; }
-  .card-h, .card-b { padding-left: 16px; padding-right: 16px; }
-  .m { padding: 16px 18px; }
-  .m-value { font-size: 1.3rem; }
+  .meta-grid { grid-template-columns: 1fr 1fr; }
+  .meta-item:nth-child(4n) { border-right: 1px solid var(--border); }
+  .meta-item:nth-child(2n) { border-right: none; }
+  .meta-item.span2, .meta-item.span3, .meta-item.span4 { grid-column: span 2; }
+  .stakeholders { grid-template-columns: 1fr; }
   .section-head { padding: 12px 14px; gap: 10px; flex-wrap: wrap; }
-  .section-head .rate, .section-head .pct { display: none; }
+  .section-head .rate, .section-head .pct, .section-head .meta-tags { display: none; }
+  .section-head .badge { width: 36px; height: 36px; }
   th, td { padding: 8px 10px; font-size: 0.74rem; }
+  .sig-block .sig-grid { grid-template-columns: 1fr; gap: 14px; }
+  footer .foot-grid { grid-template-columns: 1fr; text-align: center; }
+  footer .foot-meta { text-align: center; }
 }
 
 @media print {
   body { background: #fff; color: #000; }
-  .header { position: static; background: #1f2d3d !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .top-strip { background: var(--green-dd) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .banner { background: var(--green) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .meta-card .meta-h { background: var(--green) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .card { break-inside: avoid; border: 1px solid #ddd; }
   .section { break-inside: avoid; }
   .section-body { display: block !important; }
   .section-head .arrow { display: none; }
-  footer { display: none; }
+  .section { border: 1px solid #ccc; }
+  footer { background: var(--green-dd) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 </style>
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
-<div class="header">
-  <div class="header-left">
-    <div class="logo-box" style="background:#15202b">
-      <img src="assets/client-logo.png" alt="Mount Edgecombe Country Club Estate" onerror="this.parentElement.innerHTML='<span style=\'font-weight:900;font-size:0.82rem;color:#c8a84e;letter-spacing:0.6px;text-align:center;line-height:1\'>MECC<br><span style=\'font-size:0.5rem;color:#fff;letter-spacing:0.4px;font-weight:600\'>ESTATE</span></span>'">
-    </div>
-    <div>
-      <h1>Mount Edgecombe Country Club</h1>
-      <div class="sub">Alterations &amp; Additions &#8212; Main Clubhouse Restaurant / Dining Area</div>
-    </div>
+<!-- ============================================================
+     TOP STRIP — Metric Edge identity
+     ============================================================ -->
+<div class="top-strip">
+  <div>
+    <div class="me-id">Metric Edge</div>
+    <div class="me-sub">Cost &amp; Construction Consultants &nbsp;&middot;&nbsp; Quantity Surveyors &nbsp;&middot;&nbsp; Durban, ZA</div>
   </div>
-  <div class="header-right">
-    <div class="contractor-tag">
-      Contractor
-      <div class="contractor-name">DF Strange Builders</div>
-    </div>
-    <div class="logo-box">
-      <img src="assets/contractor-logo.png" alt="DF Strange Builders" onerror="this.parentElement.innerHTML='<span style=\'font-weight:800;font-size:0.7rem;color:#1f2d3d;letter-spacing:0.4px\'>DF STRANGE<br>BUILDERS</span>'">
-    </div>
+  <div class="doc-ref">
+    <div class="doc-type">Elemental Cost Estimate</div>
+    <div class="doc-no">ME 421 &nbsp;&middot;&nbsp; May 2026</div>
   </div>
 </div>
 
-<!-- ===== CONTEXT STRIP ===== -->
-<div class="context">
-  <div class="context-item">
-    <span class="label">Project</span>
-    <span class="value">Restaurant &amp; Dining Refurb</span>
+<!-- ============================================================
+     BANNER — project title
+     ============================================================ -->
+<div class="banner">
+  <div class="banner-inner">
+    <div class="eyebrow">Project No. ME 421</div>
+    <h1>Mount Edgecombe Country Club</h1>
+    <div class="works">Alterations and Additions to Main Clubhouse Restaurant / Dining Area</div>
   </div>
-  <div class="context-item">
-    <span class="label">Gross Building Area</span>
-    <span class="value">292 m&sup2;</span>
-  </div>
-  <div class="context-item">
-    <span class="label">Base Date</span>
-    <span class="value">May 2026</span>
-  </div>
-  <div class="context-item">
-    <span class="label">Currency</span>
-    <span class="value">ZAR</span>
-  </div>
-  <div class="context-item">
-    <span class="label">Status</span>
-    <span class="value" style="color:var(--green)">Estimate Issued</span>
-  </div>
+  <div class="accent-line"></div>
 </div>
 
-<!-- ===== CONTENT ===== -->
+<!-- ============================================================
+     CONTENT
+     ============================================================ -->
 <div class="content">
 
-  <!-- ===== TOP METRICS ===== -->
+  <!-- ===== PROJECT METADATA ===== -->
+  <div class="meta-card">
+    <div class="meta-h">Project Information</div>
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="label">Project No.</div>
+        <div class="value"><span class="accent">ME 421</span></div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Base Date</div>
+        <div class="value">May 2026</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Gross Building Area</div>
+        <div class="value">292 m&sup2;</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Currency</div>
+        <div class="value">ZAR (South African Rand)</div>
+      </div>
+
+      <div class="meta-item span2">
+        <div class="label">Project</div>
+        <div class="value">Mount Edgecombe Country Club</div>
+      </div>
+      <div class="meta-item span2">
+        <div class="label">Works</div>
+        <div class="value">Alterations and Additions to Main Clubhouse Restaurant / Dining Area</div>
+      </div>
+
+      <div class="meta-item span2">
+        <div class="label">Client</div>
+        <div class="value">Mount Edgecombe Country Club</div>
+      </div>
+      <div class="meta-item span2">
+        <div class="label">Issued To</div>
+        <div class="value">Interior Designer &amp; DF Strang Buildings</div>
+      </div>
+
+      <div class="meta-item span4">
+        <div class="label">Prepared By</div>
+        <div class="value">Metric Edge Cost &amp; Construction Consultants (Pty) Ltd</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STAKEHOLDERS ===== -->
+  <div class="stakeholders">
+    <div class="stake">
+      <div class="role">Client</div>
+      <div class="logo-wrap">
+        <img src="assets/client-logo.png" alt="Mount Edgecombe Country Club Estate">
+      </div>
+      <div class="name">Mount Edgecombe Country Club</div>
+      <div class="sub">Estate &middot; Durban, KZN</div>
+    </div>
+    <div class="stake">
+      <div class="role">Interior Designer</div>
+      <div class="logo-wrap dark-bg">
+        <img src="assets/designer-logo.png" alt="Vision by Milstead &amp; Hayter">
+      </div>
+      <div class="name">Vision by Milstead &amp; Hayter</div>
+      <div class="sub">Interior Design &middot; Décor</div>
+    </div>
+    <div class="stake">
+      <div class="role">Contractor</div>
+      <div class="logo-wrap">
+        <img src="assets/contractor-logo.png" alt="DF Strang Buildings">
+      </div>
+      <div class="name">DF Strang Buildings</div>
+      <div class="sub">The Art of Construction</div>
+    </div>
+  </div>
+
+  <!-- ===== KEY METRICS ===== -->
   <div class="mg">
-    <div class="m navy">
+    <div class="m green">
       <div class="m-label">Sub-Total (ex VAT)</div>
       <div class="m-value">R 2,371,244</div>
-      <div class="m-sub">Construction works estimate</div>
+      <div class="m-sub">Net construction works estimate</div>
     </div>
-    <div class="m indigo">
+    <div class="m dark">
       <div class="m-label">VAT @ 15%</div>
       <div class="m-value">R 355,687</div>
       <div class="m-sub">Output VAT on works</div>
     </div>
-    <div class="m gold">
+    <div class="m yellow">
       <div class="m-label">Total (incl VAT)</div>
       <div class="m-value">R 2,726,931</div>
       <div class="m-sub">Anticipated final cost</div>
     </div>
-    <div class="m green">
+    <div class="m">
       <div class="m-label">Rate per m&sup2; (ex VAT)</div>
       <div class="m-value">R 8,121</div>
       <div class="m-sub">Across 292 m&sup2; GBA</div>
     </div>
   </div>
 
-  <!-- ===== CHART + SECTION TABLE ===== -->
+  <!-- ===== ELEMENT SUMMARY ===== -->
+  <div class="card">
+    <div class="card-h">
+      <h2>Element Summary</h2>
+      <span class="h-sub">10 elements &middot; 292 m&sup2; GBA</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th class="c" style="width:42px">No.</th>
+          <th>Element</th>
+          <th class="c" style="width:60px">Unit</th>
+          <th class="r" style="width:64px">Qty</th>
+          <th class="r" style="width:160px">Amount (ZAR)</th>
+          <th class="r" style="width:88px">% of Net</th>
+          <th class="r" style="width:110px">Rate / m&sup2;</th>
+        </tr>
+      </thead>
+      <tbody id="summaryRows"></tbody>
+      <tfoot>
+        <tr class="subtotal-row">
+          <td colspan="4"><strong>Sub-Total (excluding VAT)</strong></td>
+          <td class="r"><strong>R 2,371,244.49</strong></td>
+          <td class="r"><strong>100.0%</strong></td>
+          <td class="r"><strong>R 8,120.70</strong></td>
+        </tr>
+        <tr class="vat-row">
+          <td colspan="4">VAT @ 15%</td>
+          <td class="r">R 355,686.67</td>
+          <td class="r">&mdash;</td>
+          <td class="r">R 1,218.10</td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="4"><strong>TOTAL (including VAT)</strong></td>
+          <td class="r"><strong>R 2,726,931.16</strong></td>
+          <td class="r">&mdash;</td>
+          <td class="r"><strong>R 9,338.81</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- ===== CHARTS ===== -->
   <div class="split">
     <div class="card">
       <div class="card-h">
@@ -249,228 +676,304 @@ footer .me-mark { font-weight: 600; color: var(--text2); }
         <span class="h-sub">% of sub-total</span>
       </div>
       <div class="card-b">
-        <div class="chart-wrap">
-          <canvas id="splitChart"></canvas>
-        </div>
-        <div class="legend" id="chartLegend"></div>
+        <div class="chart-wrap"><canvas id="elementChart"></canvas></div>
+        <div class="legend" id="elementLegend"></div>
       </div>
     </div>
-
     <div class="card">
       <div class="card-h">
-        <h2>Element Summary</h2>
-        <span class="h-sub">10 elements &#8226; 292 m&sup2; GBA</span>
+        <h2>Cost Split by Nominated Supplier</h2>
+        <span class="h-sub">7 nominated parties</span>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th style="width:42px" class="c">#</th>
-            <th>Element</th>
-            <th class="r">Amount (R)</th>
-            <th class="r">R / m&sup2;</th>
-            <th class="r" style="width:90px">% Share</th>
-          </tr>
-        </thead>
-        <tbody id="summaryRows"></tbody>
-        <tfoot>
-          <tr class="subtotal-row">
-            <td colspan="2"><strong>Sub-Total (ex VAT)</strong></td>
-            <td class="r"><strong>R 2,371,244.49</strong></td>
-            <td class="r"><strong>R 8,120.70</strong></td>
-            <td class="r"><strong>100.0%</strong></td>
-          </tr>
-          <tr class="vat-row">
-            <td colspan="2">VAT @ 15%</td>
-            <td class="r">R 355,686.67</td>
-            <td class="r">R 1,218.10</td>
-            <td class="r">&#8212;</td>
-          </tr>
-          <tr class="total-row">
-            <td colspan="2"><strong>TOTAL (incl VAT)</strong></td>
-            <td class="r"><strong>R 2,726,931.16</strong></td>
-            <td class="r"><strong>R 9,338.81</strong></td>
-            <td class="r">&#8212;</td>
-          </tr>
-        </tfoot>
-      </table>
+      <div class="card-b">
+        <div class="chart-wrap"><canvas id="supplierChart"></canvas></div>
+        <div class="legend" id="supplierLegend"></div>
+      </div>
     </div>
   </div>
 
-  <!-- ===== DETAILED BREAKDOWN ===== -->
+  <!-- ===== SUPPLIER SUMMARY ===== -->
   <div class="card">
     <div class="card-h">
-      <h2>Detailed Breakdown</h2>
-      <span class="h-sub">Click any element to expand line items</span>
+      <h2>Nominated Supplier Summary</h2>
+      <span class="h-sub">Cost breakdown by package</span>
     </div>
-    <div class="card-b" style="padding:14px">
-      <div id="sections"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Supplier</th>
+          <th>Scope</th>
+          <th class="c" style="width:80px">Items</th>
+          <th class="r" style="width:160px">Amount (ZAR)</th>
+          <th class="r" style="width:96px">% of Net</th>
+        </tr>
+      </thead>
+      <tbody id="supplierRows"></tbody>
+      <tfoot>
+        <tr class="subtotal-row">
+          <td colspan="3"><strong>Total (excluding VAT)</strong></td>
+          <td class="r"><strong>R 2,371,244.49</strong></td>
+          <td class="r"><strong>100.0%</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- ===== DETAILED BREAKDOWN ===== -->
+  <div class="card" style="background:transparent;border:none;box-shadow:none">
+    <div class="card-h" style="background:transparent;border:none;padding:0 0 12px">
+      <h2 style="font-size:1.2rem">Detailed Breakdown by Element</h2>
+      <span class="h-sub">Click any element to expand line items &middot; supplier shown per row</span>
     </div>
+    <div id="sections"></div>
+  </div>
+
+  <!-- ===== NOTES ===== -->
+  <div class="card notes-card">
+    <div class="card-h" style="background:transparent">
+      <h2>Notes, Assumptions &amp; Exclusions</h2>
+      <span class="h-sub">Read carefully before relying on figures</span>
+    </div>
+    <div class="card-b">
+      <ol class="notes-list">
+        <li>This is an estimate prepared from the Interior Designer's scope of works and selected supplier pricing.</li>
+        <li>All rates are exclusive of Value Added Tax (VAT). VAT is shown separately at 15%.</li>
+        <li>Base date is May 2026. Escalation beyond this date has not been allowed for and must be added by separate provision if works commence later.</li>
+        <li>Preliminaries (Element 10.0) include Builders' Preliminaries (Supervision, Attendance, Transport, H&amp;S) and QS Fee &ndash; Pre-Contract only.</li>
+        <li>Provisional Sums (Element 9.0) carry a NIL allowance at this stage. To be confirmed once the scope is finalised.</li>
+        <li>Excludes: Professional fees other than QS pre-contract, statutory approvals, occupational health &amp; safety beyond builder allowance, contingencies, and any works not specified.</li>
+        <li>Costs sourced from nominated suppliers: DF Strang (builders work &ndash; estimate), Weeks Interiors (ceilings), Vision D&eacute;cor (furniture), Kingston (joinery), Afrigran (stonework), CW Electrical (electrical), and Tim Brooks (air conditioning).</li>
+        <li>Issued via the Interior Designer for client review.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ===== SIGNATURE BLOCK ===== -->
+  <div class="sig-block">
+    <div class="sig-h">Prepared By</div>
+    <div class="sig-grid">
+      <div class="sig-line">
+        <span class="lbl">Signed</span>
+        <span class="underscore"></span>
+      </div>
+      <div class="sig-line">
+        <span class="lbl">Date</span>
+        <span class="underscore"></span>
+      </div>
+    </div>
+    <div class="sig-foot">for Metric Edge Cost &amp; Construction Consultants (Pty) Ltd</div>
   </div>
 
 </div>
 
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
 <footer>
-  <div class="me-mark">Metric Edge &#8226; ME 421 &#8226; Mount Edgecombe Country Club</div>
-  <div style="margin-top:4px">Pre-Contract Estimate &#8226; Base Date May 2026 &#8226; All costs ZAR</div>
+  <div class="foot-inner">
+    <div class="foot-line"></div>
+    <div class="foot-grid">
+      <div>
+        <div class="foot-id">Metric Edge &middot; ME 421</div>
+        <div class="foot-sub">Mount Edgecombe Country Club &middot; Elemental Cost Estimate &middot; May 2026</div>
+      </div>
+      <div class="foot-meta">
+        <span class="yellow-mark">Soli Deo Gloria</span> &nbsp;&middot;&nbsp; All values ZAR &middot; Base Date May 2026<br>
+        <span style="font-size:0.62rem;opacity:0.7">Cost &amp; Construction Consultants &middot; Quantity Surveyors &middot; Durban, ZA</span>
+      </div>
+    </div>
+  </div>
 </footer>
 
 <script>
 // ============================================================
-// DATA — ME 421 ESTIMATE (verbatim from Mount Edgecombe CC.xlsx)
+// DATA — ME 421 ESTIMATE (verbatim from xlsx)
 // ============================================================
 const SUBTOTAL = 2371244.49;
 const GBA = 292;
 
-const SECTIONS = [
+const SUPPLIERS = {
+  'DF Strang':       { colour: '#1a1a1a', accent: '#dcdc28', short: 'Builders' },
+  'Weeks Interiors': { colour: '#6890a4', accent: '#a8c4cf', short: 'Ceilings' },
+  'Vision Décor':    { colour: '#28503c', accent: '#4a7560', short: 'Furniture' },
+  'Kingston':        { colour: '#8b5a3c', accent: '#a87a55', short: 'Joinery' },
+  'Afrigran':        { colour: '#9a8478', accent: '#b8a597', short: 'Stonework' },
+  'CW Electrical':   { colour: '#a3503b', accent: '#c46b54', short: 'Electrical' },
+  'Tim Brooks':      { colour: '#5b9aa0', accent: '#7eb5bb', short: 'Air Con' }
+};
+
+const ELEMENTS = [
   {
     id: '1.0', name: 'Alterations / Demolitions / Builders Works',
-    short: 'Alterations & Builders Works', amount: 94300, colour: '#8b5a3c',
+    short: 'Alterations & Builders Work', amount: 94300, colour: '#1a1a1a', unit: 'm²', qty: 292,
     items: [
-      { ref: '1.1', desc: 'Allowance for minor alterations and preparation works to new bar area', unit: 'item', qty: 1, rate: 15000, amt: 15000 },
-      { ref: '1.2', desc: 'Remove existing tiles to dining area and cart away', unit: 'm²', qty: 24, rate: 200, amt: 4800 },
-      { ref: '1.3', desc: 'New plumbing provision to Bar area', unit: 'Prov Sum', qty: 1, rate: 13500, amt: 13500 },
-      { ref: '1.4', desc: 'Provision for new prep bowl, tap, waste and trap (sanware / brassware)', unit: 'Prov Sum', qty: 1, rate: 6000, amt: 6000 },
-      { ref: '1.5', desc: 'Allowance for alteration works around entrance to kitchen as required to facilitate', unit: 'Prov Sum', qty: 1, rate: 5000, amt: 5000 },
-      { ref: '1.6', desc: 'Provision for new solid timber doors incl. ironmongery to kitchen', unit: 'Prov Sum', qty: 1, rate: 30000, amt: 30000 },
-      { ref: '1.7', desc: 'Provision for carting away of rubble', unit: 'Prov Sum', qty: 1, rate: 20000, amt: 20000 }
+      { ref: '1.1', desc: 'Allowance for minor alterations and preparation works to new bar area',                            unit: 'item',     qty: 1,  rate: 15000, amt: 15000, supplier: 'DF Strang' },
+      { ref: '1.2', desc: 'Remove existing tiles to dining area and cart away',                                              unit: 'm²',       qty: 24, rate: 200,   amt: 4800,  supplier: 'DF Strang' },
+      { ref: '1.3', desc: 'New plumbing provision to Bar area',                                                              unit: 'Prov Sum', qty: 1,  rate: 13500, amt: 13500, supplier: 'DF Strang' },
+      { ref: '1.4', desc: 'Provision for new prep bowl, tap, waste and trap (sanware / brassware)',                          unit: 'Prov Sum', qty: 1,  rate: 6000,  amt: 6000,  supplier: 'DF Strang' },
+      { ref: '1.5', desc: 'Allowance for alteration works around entrance to kitchen as required to facilitate',             unit: 'Prov Sum', qty: 1,  rate: 5000,  amt: 5000,  supplier: 'DF Strang' },
+      { ref: '1.6', desc: 'Provision for new solid timber doors incl. ironmongery to kitchen',                               unit: 'Prov Sum', qty: 1,  rate: 30000, amt: 30000, supplier: 'DF Strang' },
+      { ref: '1.7', desc: 'Provision for carting away of rubble',                                                            unit: 'Prov Sum', qty: 1,  rate: 20000, amt: 20000, supplier: 'DF Strang' }
     ]
   },
   {
     id: '2.0', name: 'Ceilings',
-    short: 'Ceilings', amount: 438319.50, colour: '#3b6e8f',
+    short: 'Ceilings', amount: 438319.50, colour: '#6890a4', unit: 'm²', qty: 292,
     items: [
-      { ref: '2.1', desc: 'Strip existing ceiling boards, assess and carry out remedial works to existing grid structure for new ceiling installation', unit: 'm²', qty: 284.6, rate: 125, amt: 35575 },
-      { ref: '2.2', desc: 'Strip existing bulkheads to allow for new coffer design', unit: 'm', qty: 106.4, rate: 85, amt: 9044 },
-      { ref: '2.3', desc: '600 x 600 mm exposed tee suspended ceilings with AMF Thermofon acoustic tile and expanded mesh as per Capco spec', unit: 'm²', qty: 237.2, rate: 715, amt: 169598 },
-      { ref: '2.4', desc: '9.5 mm flush plastered suspended ceiling to areas not receiving exposed tee ceilings', unit: 'm²', qty: 24, rate: 265, amt: 6360 },
-      { ref: '2.5', desc: '20 mm Sigma shadowline to perimeter coffer and wall junction', unit: 'm', qty: 70, rate: 85, amt: 5950 },
-      { ref: '2.6', desc: 'SM25 / M6 perimeter trim fixed to side of coffer', unit: 'm', qty: 294.4, rate: 75, amt: 22080 },
-      { ref: '2.7', desc: '380 x 250 mm bulkhead coffers', unit: 'm', qty: 203.5, rate: 685, amt: 139397.50 },
-      { ref: '2.8', desc: 'Recessed light trough wash light bulkhead to buffet service walls', unit: 'm', qty: 14, rate: 750, amt: 10500 },
-      { ref: '2.9', desc: 'P&G', unit: 'item', qty: 1, rate: 5000, amt: 5000 },
-      { ref: '2.10', desc: 'Paint to ceilings, bulkheads and cornices (incl. bathroom ceilings)', unit: 'm²', qty: 464.2, rate: 75, amt: 34815 }
+      { ref: '2.1',  desc: 'Strip existing ceiling boards, assess and carry out remedial works to existing grid structure for new ceiling installation', unit: 'm²', qty: 284.6, rate: 125, amt: 35575,    supplier: 'Weeks Interiors' },
+      { ref: '2.2',  desc: 'Strip existing bulkheads to allow for new coffer design',                                          unit: 'm',  qty: 106.4, rate: 85,  amt: 9044,     supplier: 'Weeks Interiors' },
+      { ref: '2.3',  desc: '600 x 600 mm exposed tee suspended ceilings with AMF Thermofon acoustic tile and expanded mesh per Capco spec', unit: 'm²', qty: 237.2, rate: 715, amt: 169598,   supplier: 'Weeks Interiors' },
+      { ref: '2.4',  desc: '9.5 mm flush plastered suspended ceiling to areas not receiving exposed tee ceilings',             unit: 'm²', qty: 24,    rate: 265, amt: 6360,     supplier: 'Weeks Interiors' },
+      { ref: '2.5',  desc: '20 mm Sigma shadowline to perimeter coffer and wall junction',                                     unit: 'm',  qty: 70,    rate: 85,  amt: 5950,     supplier: 'Weeks Interiors' },
+      { ref: '2.6',  desc: 'SM25 / M6 perimeter trim fixed to side of coffer',                                                 unit: 'm',  qty: 294.4, rate: 75,  amt: 22080,    supplier: 'Weeks Interiors' },
+      { ref: '2.7',  desc: '380 x 250 mm bulkhead coffers',                                                                    unit: 'm',  qty: 203.5, rate: 685, amt: 139397.5, supplier: 'Weeks Interiors' },
+      { ref: '2.8',  desc: 'Recessed light trough wash light bulkhead to buffet service walls',                                unit: 'm',  qty: 14,    rate: 750, amt: 10500,    supplier: 'Weeks Interiors' },
+      { ref: '2.9',  desc: 'P&G',                                                                                              unit: 'item', qty: 1,  rate: 5000, amt: 5000,    supplier: 'Weeks Interiors' },
+      { ref: '2.10', desc: 'Paint to ceilings, bulkheads and cornices (incl. bathroom ceilings)',                              unit: 'm²', qty: 464.2, rate: 75,  amt: 34815,    supplier: 'DF Strang' }
     ]
   },
   {
     id: '3.0', name: 'Flooring',
-    short: 'Flooring', amount: 16272.24, colour: '#6b8e23',
+    short: 'Flooring', amount: 16272.24, colour: '#6b8e23', unit: 'm²', qty: 292,
     items: [
-      { ref: '3.1', desc: 'Floor tiles to Architect’s specification — to dining area, where existing tiles have been removed', unit: 'm²', qty: 24, rate: 678.01, amt: 16272.24,
+      { ref: '3.1', desc: "Floor tiles to Architect's specification &mdash; to dining area, where existing tiles have been removed", unit: 'm²', qty: 24, rate: 678.01, amt: 16272.24, supplier: 'DF Strang',
         notes: ['Tiling supply (PC R 250/m² ex VAT)', 'Wastage allowance 10%', 'Installation (labour / adhesive / grout incl. markup)', 'Screed where required', 'Sundries (% allowance)'] }
     ]
   },
   {
     id: '4.0', name: 'Movable Furniture / Plants',
-    short: 'Movable Furniture & Plants', amount: 1030310.25, colour: '#c8a84e',
+    short: 'Movable Furniture & Plants', amount: 1030310.25, colour: '#28503c', unit: 'm²', qty: 292,
     items: [
-      { ref: '4.1',  area: 'Bar Area',     desc: 'Artifacts and decor for bar shelving',                                     unit: 'no', qty: 1,  rate: 21000,    amt: 21000 },
-      { ref: '4.2',  area: 'Bar Area',     desc: 'Framed photography',                                                       unit: 'no', qty: 2,  rate: 3750,     amt: 7500 },
-      { ref: '4.3',  area: 'Bathroom',     desc: 'Fix mirror behind existing vanity',                                        unit: 'no', qty: 1,  rate: 15617,    amt: 15617 },
-      { ref: '4.4',  area: 'Bathroom',     desc: 'Artifacts and decor for bathroom',                                         unit: 'no', qty: 1,  rate: 14000,    amt: 14000 },
-      { ref: '4.5',  area: 'Dining Hall',  desc: 'Moka Dining Base',                                                         unit: 'no', qty: 24, rate: 2749.75,  amt: 65994 },
-      { ref: '4.6',  area: 'Dining Hall',  desc: '900 x 900 Timber Top',                                                     unit: 'no', qty: 24, rate: 4116.54,  amt: 98796.96 },
-      { ref: '4.7',  area: 'Dining Hall',  desc: 'Arusha Dining Chair',                                                      unit: 'no', qty: 82, rate: 3611.64,  amt: 296154.48 },
-      { ref: '4.8',  area: 'Dining Hall',  desc: 'Custom palm wallpaper in entrance and buffet area',                        unit: 'no', qty: 1,  rate: 30225.09, amt: 30225.09 },
-      { ref: '4.9',  area: 'Dining Hall',  desc: 'Custom raffia wallpaper 23 m x 2.7 height',                                unit: 'no', qty: 1,  rate: 38812.50, amt: 38812.50 },
-      { ref: '4.10', area: 'Dining Hall',  desc: 'Large brass signage',                                                      unit: 'no', qty: 1,  rate: 14030,    amt: 14030 },
-      { ref: '4.11', area: 'Dining Hall',  desc: 'Custom entrance mirror wall with laser-cut brass detail 4 m x 2.7',        unit: 'no', qty: 1,  rate: 49289,    amt: 49289 },
-      { ref: '4.12', area: 'Dining Hall',  desc: 'Artificial plants for mobile and large black planters',                    unit: 'no', qty: 1,  rate: 126500,   amt: 126500 },
-      { ref: '4.13', area: 'Dining Hall',  desc: 'Rustic Ellipse Japi Planter (medium)',                                     unit: 'no', qty: 4,  rate: 1568.18,  amt: 6272.72 },
-      { ref: '4.14', area: 'Dining Hall',  desc: 'Reupholster existing occasional chairs',                                   unit: 'no', qty: 2,  rate: 8437.50,  amt: 16875 },
-      { ref: '4.15', area: 'Dining Hall',  desc: 'Scatter cushion budget for sofa and occasional chairs',                    unit: 'no', qty: 4,  rate: 1400,     amt: 5600 },
-      { ref: '4.16', area: 'Dining Hall',  desc: 'Framed photography',                                                       unit: 'no', qty: 2,  rate: 4673.92,  amt: 9347.84 },
-      { ref: '4.17', area: 'Dining Hall',  desc: 'Vogue Rechargeable Dimmable Table Lamp Black / Gold',                      unit: 'no', qty: 22, rate: 782.61,   amt: 17217.42 },
-      { ref: '4.18', area: 'Dining Hall',  desc: 'Elizabeth LED Metal Picture Wall Light Antique Bronze / Satin Nickel',     unit: 'no', qty: 4,  rate: 869.56,   amt: 3478.24 },
-      { ref: '4.19', area: 'Dining Hall',  desc: 'Planter Boxes — oak veneer with monocoat oil, shaker panels, melaply plinths, lower shelf in solid oak', unit: 'no', qty: 1, rate: 193600, amt: 193600 }
+      { ref: '4.1',  desc: 'Artifacts and decor for bar shelving',                                                    unit: 'no', qty: 1,  rate: 21000,    amt: 21000,    supplier: 'Vision Décor', area: 'Bar Area' },
+      { ref: '4.2',  desc: 'Framed photography',                                                                       unit: 'no', qty: 2,  rate: 3750,     amt: 7500,     supplier: 'Vision Décor', area: 'Bar Area' },
+      { ref: '4.3',  desc: 'Fix mirror behind existing vanity',                                                        unit: 'no', qty: 1,  rate: 15617,    amt: 15617,    supplier: 'Vision Décor', area: 'Bathroom' },
+      { ref: '4.4',  desc: 'Artifacts and decor for bathroom',                                                         unit: 'no', qty: 1,  rate: 14000,    amt: 14000,    supplier: 'Vision Décor', area: 'Bathroom' },
+      { ref: '4.5',  desc: 'Moka Dining Base',                                                                         unit: 'no', qty: 24, rate: 2749.75,  amt: 65994,    supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.6',  desc: '900 x 900 Timber Top',                                                                     unit: 'no', qty: 24, rate: 4116.54,  amt: 98796.96, supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.7',  desc: 'Arusha Dining Chair',                                                                      unit: 'no', qty: 82, rate: 3611.64,  amt: 296154.48, supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.8',  desc: 'Custom palm wallpaper in entrance and buffet area',                                        unit: 'no', qty: 1,  rate: 30225.09, amt: 30225.09, supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.9',  desc: 'Custom raffia wallpaper 23 m x 2.7 height',                                                unit: 'no', qty: 1,  rate: 38812.50, amt: 38812.50, supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.10', desc: 'Large brass signage',                                                                       unit: 'no', qty: 1,  rate: 14030,    amt: 14030,    supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.11', desc: 'Custom entrance mirror wall with laser-cut brass detail 4 m x 2.7',                        unit: 'no', qty: 1,  rate: 49289,    amt: 49289,    supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.12', desc: 'Artificial plants for mobile and large black planters',                                    unit: 'no', qty: 1,  rate: 126500,   amt: 126500,   supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.13', desc: 'Rustic Ellipse Japi Planter (medium)',                                                     unit: 'no', qty: 4,  rate: 1568.18,  amt: 6272.72,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.14', desc: 'Reupholster existing occasional chairs',                                                   unit: 'no', qty: 2,  rate: 8437.50,  amt: 16875,    supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.15', desc: 'Scatter cushion budget for sofa and occasional chairs',                                    unit: 'no', qty: 4,  rate: 1400,     amt: 5600,     supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.16', desc: 'Framed photography',                                                                       unit: 'no', qty: 2,  rate: 4673.92,  amt: 9347.84,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.17', desc: 'Vogue Rechargeable Dimmable Table Lamp Black / Gold',                                      unit: 'no', qty: 22, rate: 782.61,   amt: 17217.42, supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.18', desc: 'Elizabeth LED Metal Picture Wall Light Antique Bronze / Satin Nickel',                     unit: 'no', qty: 4,  rate: 869.56,   amt: 3478.24,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.19', desc: 'Planter Boxes &mdash; oak veneer with monocoat oil, shaker panels, melaply plinths, lower shelf in solid oak', unit: 'no', qty: 1, rate: 193600, amt: 193600, supplier: 'Kingston', area: 'Dining Hall' }
     ]
   },
   {
-    id: '5.0', name: 'Airconditioning',
-    short: 'Airconditioning', amount: 59900, colour: '#5b9aa0',
+    id: '5.0', name: 'Air Conditioning',
+    short: 'Air Conditioning', amount: 59900, colour: '#5b9aa0', unit: 'm²', qty: 292,
     items: [
-      { ref: '5.1', desc: 'Custom made diffusers supplied and installed — 12 supply air diffusers (existing flexible ducting reused) and 6 return air diffusers, each with Thermoboard plenums and filters',
-        unit: 'Sum', qty: 1, rate: 59900, amt: 59900 }
+      { ref: '5.1', desc: 'Custom made diffusers supplied and installed &mdash; 12 supply air diffusers (existing flexible ducting reused) and 6 return air diffusers, each with Thermoboard plenums and filters',
+        unit: 'Sum', qty: 1, rate: 59900, amt: 59900, supplier: 'Tim Brooks' }
     ]
   },
   {
     id: '6.0', name: 'Electrical',
-    short: 'Electrical', amount: 123575, colour: '#a3503b',
+    short: 'Electrical', amount: 123575, colour: '#a3503b', unit: 'm²', qty: 292,
     groups: [
       { title: 'Entrance / New Bar & Coffee Station', items: [
-        { desc: 'Downlighter points — acoustic panels (entrance)',                                qty: 12, rate: 345,  amt: 4140 },
-        { desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',           qty: 12, rate: 215,  amt: 2580 },
-        { desc: 'LED strip light point — wooden panelling feature (entrance)',                    qty: 1,  rate: 895,  amt: 895 },
-        { desc: '10 W warm white solid line LED strip + surface aluminium profile (120 W 24 V driver)', qty: 1,  rate: 2395, amt: 2395 },
-        { desc: 'Plug points — above counter (new bar)',                                          qty: 3,  rate: 895,  amt: 2685 },
-        { desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                              qty: 3,  rate: 305,  amt: 915 },
-        { desc: 'Plug point — fridges (new bar)',                                                 qty: 1,  rate: 895,  amt: 895 },
-        { desc: 'Legrand Ysalis white double socket',                                                  qty: 1,  rate: 295,  amt: 295 },
-        { desc: 'Downlighter points — new bar',                                                   qty: 3,  rate: 345,  amt: 1035 },
-        { desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',           qty: 3,  rate: 215,  amt: 645 },
-        { desc: 'LED strip light points — bar shelves / cabinetry',                               qty: 12, rate: 395,  amt: 4740 },
-        { desc: '10 W warm white solid line LED strip + flush aluminium profile (200 W 24 V driver)', qty: 1,  rate: 2895, amt: 2895 },
-        { desc: 'Ceiling speaker points — relocated to new positions',                            qty: 2,  rate: 295,  amt: 590 }
+        { ref: '6.1',  desc: 'Downlighter points &mdash; acoustic panels (entrance)',                                   qty: 12, rate: 345,  amt: 4140 },
+        { ref: '6.2',  desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                qty: 12, rate: 215,  amt: 2580 },
+        { ref: '6.3',  desc: 'LED strip light point &mdash; wooden panelling feature (entrance)',                       qty: 1,  rate: 895,  amt: 895 },
+        { ref: '6.4',  desc: '10 W warm white solid line LED strip + surface aluminium profile (120 W 24 V driver)',   qty: 1,  rate: 2395, amt: 2395 },
+        { ref: '6.5',  desc: 'Plug points &mdash; above counter (new bar)',                                             qty: 3,  rate: 895,  amt: 2685 },
+        { ref: '6.6',  desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                  qty: 3,  rate: 305,  amt: 915 },
+        { ref: '6.7',  desc: 'Plug point &mdash; fridges (new bar)',                                                    qty: 1,  rate: 895,  amt: 895 },
+        { ref: '6.8',  desc: 'Legrand Ysalis white double socket',                                                      qty: 1,  rate: 295,  amt: 295 },
+        { ref: '6.9',  desc: 'Downlighter points &mdash; new bar',                                                      qty: 3,  rate: 345,  amt: 1035 },
+        { ref: '6.10', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                qty: 3,  rate: 215,  amt: 645 },
+        { ref: '6.11', desc: 'LED strip light points &mdash; bar shelves / cabinetry',                                  qty: 12, rate: 395,  amt: 4740 },
+        { ref: '6.12', desc: '10 W warm white solid line LED strip + flush aluminium profile (200 W 24 V driver)',     qty: 1,  rate: 2895, amt: 2895 },
+        { ref: '6.13', desc: 'Ceiling speaker points &mdash; relocated to new positions',                              qty: 2,  rate: 295,  amt: 590 }
       ]},
       { title: 'Main Seated Area', items: [
-        { desc: 'Downlighter points — acoustic panels',                                          qty: 72, rate: 345,  amt: 24840 },
-        { desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',           qty: 72, rate: 215,  amt: 15480 },
-        { desc: 'Ceiling fan points — wire / brace + assemble and install',                       qty: 4,  rate: 795,  amt: 3180 },
-        { desc: 'Zebbies rattan ceiling fans + remotes / batteries',                                   qty: 4,  rate: 5000, amt: 20000 },
-        { desc: 'Ceiling speaker points — relocated to new positions',                            qty: 5,  rate: 295,  amt: 1475 }
+        { ref: '6.15', desc: 'Downlighter points &mdash; acoustic panels',                                              qty: 72, rate: 345,  amt: 24840 },
+        { ref: '6.16', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                qty: 72, rate: 215,  amt: 15480 },
+        { ref: '6.17', desc: 'Ceiling fan points &mdash; wire / brace + assemble and install',                          qty: 4,  rate: 795,  amt: 3180 },
+        { ref: '6.18', desc: 'Zebbies rattan ceiling fans + remotes / batteries',                                       qty: 4,  rate: 5000, amt: 20000 },
+        { ref: '6.19', desc: 'Ceiling speaker points &mdash; relocated to new positions',                              qty: 5,  rate: 295,  amt: 1475 }
       ]},
       { title: 'Slanted Ceiling Glass Verandah Seated Area', items: [
-        { desc: 'Downlighter points — acoustic panels',                                          qty: 24, rate: 345,  amt: 8280 },
-        { desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',           qty: 24, rate: 215,  amt: 5160 },
-        { desc: 'Auto blind 15 A single plug points',                                                  qty: 7,  rate: 795,  amt: 5565 }
+        { ref: '6.21', desc: 'Downlighter points &mdash; acoustic panels',                                              qty: 24, rate: 345,  amt: 8280 },
+        { ref: '6.22', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                qty: 24, rate: 215,  amt: 5160 },
+        { ref: '6.23', desc: 'Auto blind 15 A single plug points',                                                      qty: 7,  rate: 795,  amt: 5565 }
       ]},
       { title: 'New Server', items: [
-        { desc: 'Plug points — counter / wall',                                                   qty: 4,  rate: 895,  amt: 3580 },
-        { desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                              qty: 4,  rate: 305,  amt: 1220 },
-        { desc: 'Downlighter points — acoustic panels',                                          qty: 7,  rate: 345,  amt: 2415 },
-        { desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',           qty: 7,  rate: 215,  amt: 1505 },
-        { desc: 'LED strip light point — granite over-hang serving counter',                      qty: 1,  rate: 895,  amt: 895 },
-        { desc: '10 W warm white solid line LED strip + flush aluminium profile (200 W 24 V driver)', qty: 1,  rate: 2650, amt: 2650 }
+        { ref: '6.25', desc: 'Plug points &mdash; counter / wall',                                                      qty: 4,  rate: 895,  amt: 3580 },
+        { ref: '6.26', desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                  qty: 4,  rate: 305,  amt: 1220 },
+        { ref: '6.27', desc: 'Downlighter points &mdash; acoustic panels',                                              qty: 7,  rate: 345,  amt: 2415 },
+        { ref: '6.28', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                qty: 7,  rate: 215,  amt: 1505 },
+        { ref: '6.29', desc: 'LED strip light point &mdash; granite over-hang serving counter',                         qty: 1,  rate: 895,  amt: 895 },
+        { ref: '6.30', desc: '10 W warm white solid line LED strip + flush aluminium profile (200 W 24 V driver)',     qty: 1,  rate: 2650, amt: 2650 }
       ]},
       { title: 'General', items: [
-        { desc: 'Strip out and remove all electrical fittings from ceilings — boards removed, framework to remain', qty: 1, rate: 2625, amt: 2625 }
+        { ref: '6.32', desc: 'Strip out and remove all electrical fittings from ceilings &mdash; boards removed, framework to remain', qty: 1, rate: 2625, amt: 2625 }
       ]}
-    ]
+    ],
+    groupSupplier: 'CW Electrical'
   },
   {
     id: '7.0', name: 'Fixed Joinery & Stonework',
-    short: 'Fixed Joinery & Stonework', amount: 492530, colour: '#7c4a35',
+    short: 'Fixed Joinery & Stonework', amount: 492530, colour: '#7c4a35', unit: 'm²', qty: 292,
     items: [
-      { ref: '7.1', desc: 'Bar installation — white melamine carcasses; melaply to water areas and plinths; plinths clad in PVC to suit door colour; island in curved shaker panels; doors 22 mm supawood shaker panels; oak veneer double-bonded shelves and uprights in monocoat oil; plain mirror; Grass Novapro 1 soft-close runners and hinges (white); LED routering (LEDs by electrician); handles supplied by decorator. Excludes brass foot rail.',
-        unit: 'Sum', qty: 1, rate: 195700, amt: 195700 },
-      { ref: '7.2', desc: '20 mm built-up Vanilla Noir Caesarstone 5100 — bar counter: higher and lower bar tops and splashback between lower and higher top and back counter',
-        unit: 'Sum', qty: 1, rate: 149860, amt: 149860 },
-      { ref: '7.3', desc: 'Server installation (Buffet) — no carcasses; false panels to base and framework in oak veneer with monocoat oil; melaply to water areas and plinths; plinths in melaply with monocoat oil; curved shaker panels (22 mm oak veneer) with monocoat oil; lower shelf for plates in solid oak with monocoat oil',
-        unit: 'Sum', qty: 1, rate: 82800, amt: 82800 },
-      { ref: '7.4', desc: '50 mm mitre build-up Moorland Fog Caesarstone 6046 — server top (700 mm deep, or 800 mm deep with no build-up)',
-        unit: 'Sum', qty: 1, rate: 64170, amt: 64170 }
+      { ref: '7.1', desc: 'Bar installation &mdash; white melamine carcasses, melaply to water areas and plinths, PVC-clad plinths, curved shaker island panels, 22 mm supawood shaker doors, oak veneer monocoat shelves, mirror, Grass Novapro 1 soft-close, LED routering. Excludes brass foot rail.',
+        unit: 'Sum', qty: 1, rate: 195700, amt: 195700, supplier: 'Kingston' },
+      { ref: '7.2', desc: '20 mm built-up Vanilla Noir Caesarstone 5100 &mdash; bar counter: higher and lower tops, splashback between lower and higher top and back counter',
+        unit: 'Sum', qty: 1, rate: 149860, amt: 149860, supplier: 'Afrigran' },
+      { ref: '7.3', desc: 'Server (Buffet) installation &mdash; no carcasses, false panels in oak veneer monocoat, melaply plinths in monocoat, curved 22 mm oak veneer shaker panels, lower shelf in solid oak monocoat',
+        unit: 'Sum', qty: 1, rate: 82800, amt: 82800, supplier: 'Kingston' },
+      { ref: '7.4', desc: '50 mm mitre build-up Moorland Fog Caesarstone 6046 &mdash; server top (700 mm deep, or 800 mm with no build-up)',
+        unit: 'Sum', qty: 1, rate: 64170, amt: 64170, supplier: 'Afrigran' }
     ]
   },
   {
     id: '8.0', name: 'Internal Wall Finishes',
-    short: 'Internal Wall Finishes', amount: 21037.50, colour: '#9a8478',
+    short: 'Internal Wall Finishes', amount: 21037.50, colour: '#9a8478', unit: 'm²', qty: 292,
     items: [
-      { ref: '8.1', desc: 'Internal paint to walls incl. bathroom walls', unit: 'm²', qty: 280.5, rate: 75, amt: 21037.50 }
+      { ref: '8.1', desc: 'Internal paint to walls incl. bathroom walls', unit: 'm²', qty: 280.5, rate: 75, amt: 21037.50, supplier: 'DF Strang' }
     ]
   },
   {
     id: '9.0', name: 'Provisional Sums',
-    short: 'Provisional Sums', amount: 0, colour: '#cccccc',
+    short: 'Provisional Sums', amount: 0, colour: '#cccccc', unit: 'm²', qty: 292,
     items: []
   },
   {
     id: '10.0', name: 'Preliminaries',
-    short: 'Preliminaries', amount: 95000, colour: '#4a5568',
+    short: 'Preliminaries', amount: 95000, colour: '#1a1a1a', unit: 'm²', qty: 292,
     items: [
-      { ref: '10.1', desc: 'Builders preliminaries (supervision, attendance, transport, H&S and other)', unit: 'Sum', qty: 1, rate: 75000, amt: 75000 },
-      { ref: '10.2', desc: 'QS fee (Pre-Contract only)',                                                  unit: 'Sum', qty: 1, rate: 20000, amt: 20000 }
+      { ref: '10.1', desc: 'Builders preliminaries (Supervision, Attendance, Transport, H&S and other)', unit: 'Sum', qty: 1, rate: 75000, amt: 75000, supplier: 'DF Strang' },
+      { ref: '10.2', desc: 'QS fee (Pre-Contract only)',                                                  unit: 'Sum', qty: 1, rate: 20000, amt: 20000, supplier: 'DF Strang' }
     ]
   }
 ];
+
+// Compute supplier totals from line items (single source of truth)
+const SUPPLIER_TOTALS = {};
+const SUPPLIER_COUNTS = {};
+ELEMENTS.forEach(el => {
+  if (el.items) {
+    el.items.forEach(it => {
+      const s = it.supplier;
+      if (!s) return;
+      SUPPLIER_TOTALS[s] = (SUPPLIER_TOTALS[s] || 0) + it.amt;
+      SUPPLIER_COUNTS[s] = (SUPPLIER_COUNTS[s] || 0) + 1;
+    });
+  }
+  if (el.groups) {
+    el.groups.forEach(g => g.items.forEach(it => {
+      const s = el.groupSupplier;
+      SUPPLIER_TOTALS[s] = (SUPPLIER_TOTALS[s] || 0) + it.amt;
+      SUPPLIER_COUNTS[s] = (SUPPLIER_COUNTS[s] || 0) + 1;
+    }));
+  }
+});
 
 // ============================================================
 // FORMATTERS
@@ -484,37 +987,47 @@ const fmtQty = (v) => {
 };
 const fmtPct = (v) => v.toFixed(1) + '%';
 
+function supTag(name) {
+  if (!name || !SUPPLIERS[name]) return '';
+  const sup = SUPPLIERS[name];
+  return `<span class="sup-tag" style="background:${sup.colour}1a;color:${sup.colour};border:1px solid ${sup.colour}30">
+    <span style="background:${sup.colour};width:8px;height:8px;border-radius:50%;display:inline-block"></span>${name}
+  </span>`;
+}
+
 // ============================================================
-// SUMMARY TABLE
+// ELEMENT SUMMARY TABLE
 // ============================================================
-function renderSummary() {
+function renderElementSummary() {
   const tbody = document.getElementById('summaryRows');
-  const maxAmt = Math.max(...SECTIONS.map(s => s.amount));
-  tbody.innerHTML = SECTIONS.map(s => {
+  const maxAmt = Math.max(...ELEMENTS.map(s => s.amount));
+  tbody.innerHTML = ELEMENTS.map(s => {
     const pct = s.amount / SUBTOTAL * 100;
     const rateM2 = s.amount / GBA;
     const barW = maxAmt > 0 ? (s.amount / maxAmt * 100) : 0;
     return `
       <tr>
-        <td class="c" style="font-weight:700;color:var(--muted)">${s.id}</td>
+        <td class="c" style="font-weight:800;color:var(--green-d);font-size:0.78rem">${s.id}</td>
         <td><strong>${s.name}</strong></td>
+        <td class="c" style="font-size:0.74rem;color:var(--muted)">${s.unit}</td>
+        <td class="r" style="font-size:0.78rem;color:var(--muted)">${fmtQty(s.qty)}</td>
         <td class="r bar-cell">
           ${fmtZAR(s.amount)}
           <div class="bar-fill" style="width:${barW}%;background:${s.colour}"></div>
         </td>
-        <td class="r">${s.amount > 0 ? fmtZAR(rateM2) : '—'}</td>
         <td class="r">${fmtPct(pct)}</td>
+        <td class="r">${s.amount > 0 ? fmtZAR(rateM2) : '—'}</td>
       </tr>
     `;
   }).join('');
 }
 
 // ============================================================
-// DOUGHNUT CHART
+// ELEMENT DOUGHNUT
 // ============================================================
-function renderChart() {
-  const ctx = document.getElementById('splitChart').getContext('2d');
-  const visible = SECTIONS.filter(s => s.amount > 0);
+function renderElementChart() {
+  const ctx = document.getElementById('elementChart').getContext('2d');
+  const visible = ELEMENTS.filter(s => s.amount > 0);
   new Chart(ctx, {
     type: 'doughnut',
     data: {
@@ -545,104 +1058,189 @@ function renderChart() {
       }
     }
   });
-
-  // Custom legend
-  const legend = document.getElementById('chartLegend');
-  legend.innerHTML = visible.map(s => `
-    <div class="legend-item">
-      <span class="dot" style="background:${s.colour}"></span>
-      <span>${s.short}</span>
-    </div>
-  `).join('');
+  document.getElementById('elementLegend').innerHTML = visible.map(s =>
+    `<div class="legend-item"><span class="dot" style="background:${s.colour}"></span><span>${s.short}</span></div>`
+  ).join('');
 }
 
 // ============================================================
-// SECTION ACCORDION (DETAILED BREAKDOWN)
+// SUPPLIER CHART (horizontal bar)
 // ============================================================
-function buildItemsTable(section) {
-  // FLAT items
-  if (section.items && section.items.length) {
-    const hasArea = section.items.some(i => i.area);
-    const hasNotes = section.items.some(i => i.notes);
-    const colsHeader = `
+function renderSupplierChart() {
+  const entries = Object.entries(SUPPLIER_TOTALS).sort((a, b) => b[1] - a[1]);
+  const ctx = document.getElementById('supplierChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: entries.map(e => e[0]),
+      datasets: [{
+        data: entries.map(e => e[1]),
+        backgroundColor: entries.map(e => SUPPLIERS[e[0]].colour),
+        borderColor: entries.map(e => SUPPLIERS[e[0]].accent),
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const pct = (ctx.parsed.x / SUBTOTAL * 100).toFixed(1);
+              return fmtZAR0(ctx.parsed.x) + ' (' + pct + '%)';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: { color: 'rgba(40,80,60,0.06)' },
+          ticks: {
+            callback: (v) => 'R ' + (v / 1000).toFixed(0) + 'k',
+            font: { size: 10 },
+            color: '#8a9994'
+          }
+        },
+        y: {
+          grid: { display: false },
+          ticks: {
+            font: { size: 11, weight: '600' },
+            color: '#1f2d2a'
+          }
+        }
+      }
+    }
+  });
+  document.getElementById('supplierLegend').innerHTML = entries.map(e =>
+    `<div class="legend-item"><span class="dot" style="background:${SUPPLIERS[e[0]].colour}"></span><span>${e[0]} &middot; ${SUPPLIERS[e[0]].short}</span></div>`
+  ).join('');
+}
+
+// ============================================================
+// SUPPLIER TABLE
+// ============================================================
+function renderSupplierTable() {
+  const entries = Object.entries(SUPPLIER_TOTALS).sort((a, b) => b[1] - a[1]);
+  document.getElementById('supplierRows').innerHTML = entries.map(([name, total]) => {
+    const sup = SUPPLIERS[name];
+    const pct = total / SUBTOTAL * 100;
+    return `
       <tr>
-        <th style="width:54px">Ref</th>
-        ${hasArea ? '<th style="width:110px">Area</th>' : ''}
-        <th>Description</th>
-        <th class="c" style="width:90px">Unit</th>
-        <th class="r" style="width:80px">Qty</th>
-        <th class="r" style="width:120px">Rate (R)</th>
-        <th class="r" style="width:140px">Amount (R)</th>
+        <td>${supTag(name)}</td>
+        <td style="color:var(--ink-2)">${sup.short}</td>
+        <td class="c" style="color:var(--muted);font-weight:600">${SUPPLIER_COUNTS[name]}</td>
+        <td class="r bar-cell">
+          <strong>${fmtZAR(total)}</strong>
+          <div class="bar-fill" style="width:${total / Math.max(...entries.map(e => e[1])) * 100}%;background:${sup.colour}"></div>
+        </td>
+        <td class="r"><strong>${fmtPct(pct)}</strong></td>
       </tr>
     `;
-    const rows = section.items.map(i => {
+  }).join('');
+}
+
+// ============================================================
+// SECTION ACCORDION
+// ============================================================
+function buildElementBody(el) {
+  if (el.items && el.items.length) {
+    const hasArea = el.items.some(i => i.area);
+    const colsHeader = `
+      <tr>
+        <th style="width:54px">No.</th>
+        ${hasArea ? '<th style="width:110px">Area</th>' : ''}
+        <th>Description</th>
+        <th class="c" style="width:80px">Unit</th>
+        <th class="r" style="width:70px">Qty</th>
+        <th class="r" style="width:110px">Rate (R)</th>
+        <th class="r" style="width:130px">Amount (R)</th>
+        <th style="width:150px">Supplier</th>
+      </tr>
+    `;
+    const rows = el.items.map(i => {
       const notesBlock = i.notes ? `<div style="margin-top:6px;font-size:0.72rem;color:var(--muted);line-height:1.5">${i.notes.map(n => '• ' + n).join('<br>')}</div>` : '';
       return `
         <tr>
-          <td style="font-weight:600;color:var(--text2)">${i.ref || ''}</td>
-          ${hasArea ? `<td style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--navy);font-weight:600">${i.area || ''}</td>` : ''}
+          <td style="font-weight:700;color:var(--green-d);font-size:0.78rem">${i.ref || ''}</td>
+          ${hasArea ? `<td style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--teal-d);font-weight:700">${i.area || ''}</td>` : ''}
           <td>${i.desc}${notesBlock}</td>
           <td class="c" style="font-size:0.72rem;color:var(--muted)">${i.unit || ''}</td>
           <td class="r">${fmtQty(i.qty)}</td>
           <td class="r">${i.rate ? fmtZAR(i.rate) : ''}</td>
-          <td class="r" style="font-weight:600">${fmtZAR(i.amt)}</td>
+          <td class="r" style="font-weight:700">${fmtZAR(i.amt)}</td>
+          <td>${supTag(i.supplier)}</td>
         </tr>
       `;
     }).join('');
-    const totalCols = (hasArea ? 6 : 5);
+    const totalCols = hasArea ? 7 : 6;
     return `
       <table>
         <thead>${colsHeader}</thead>
         <tbody>${rows}</tbody>
         <tfoot>
           <tr class="subtotal-row">
-            <td colspan="${totalCols}"><strong>Section ${section.id} Total</strong></td>
-            <td class="r"><strong>${fmtZAR(section.amount)}</strong></td>
+            <td colspan="${totalCols}"><strong>Total &mdash; Element ${el.id} &nbsp;${el.name.toUpperCase()}</strong></td>
+            <td class="r"><strong>${fmtZAR(el.amount)}</strong></td>
           </tr>
         </tfoot>
       </table>
     `;
   }
-  // GROUPED items (e.g. Electrical)
-  if (section.groups && section.groups.length) {
-    let html = '<table><thead><tr><th>Description</th><th class="r" style="width:80px">Qty</th><th class="r" style="width:120px">Rate (R)</th><th class="r" style="width:140px">Amount (R)</th></tr></thead><tbody>';
-    section.groups.forEach(g => {
+  if (el.groups && el.groups.length) {
+    let html = '<table><thead><tr><th style="width:54px">No.</th><th>Description</th><th class="r" style="width:70px">Qty</th><th class="r" style="width:110px">Rate (R)</th><th class="r" style="width:130px">Amount (R)</th><th style="width:150px">Supplier</th></tr></thead><tbody>';
+    el.groups.forEach(g => {
       const gTotal = g.items.reduce((s, i) => s + i.amt, 0);
-      html += `<tr class="subsection-row"><td>${g.title}</td><td class="r">&nbsp;</td><td class="r">&nbsp;</td><td class="r">${fmtZAR(gTotal)}</td></tr>`;
+      html += `<tr style="background:var(--teal-tint)"><td colspan="4" style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--teal-d);font-weight:800;padding:9px 14px">${g.title}</td><td class="r" style="font-weight:700;color:var(--teal-d)">${fmtZAR(gTotal)}</td><td></td></tr>`;
       g.items.forEach(i => {
         html += `<tr>
+          <td style="font-weight:700;color:var(--green-d);font-size:0.78rem">${i.ref || ''}</td>
           <td>${i.desc}</td>
           <td class="r">${fmtQty(i.qty)}</td>
           <td class="r">${fmtZAR(i.rate)}</td>
-          <td class="r" style="font-weight:600">${fmtZAR(i.amt)}</td>
+          <td class="r" style="font-weight:700">${fmtZAR(i.amt)}</td>
+          <td>${supTag(el.groupSupplier)}</td>
         </tr>`;
       });
     });
-    html += `<tr class="subtotal-row"><td colspan="3"><strong>Section ${section.id} Total</strong></td><td class="r"><strong>${fmtZAR(section.amount)}</strong></td></tr>`;
+    html += `<tr class="subtotal-row"><td colspan="5"><strong>Total &mdash; Element ${el.id} &nbsp;${el.name.toUpperCase()}</strong></td><td class="r" style="text-align:right"><strong>${fmtZAR(el.amount)}</strong></td></tr>`;
     html += '</tbody></table>';
     return html;
   }
-  return '<div style="padding:18px;color:var(--muted);font-size:0.82rem;text-align:center">No line items — budget allowance only.</div>';
+  return '<div style="padding:24px;color:var(--muted);font-size:0.84rem;text-align:center;font-style:italic">NIL allowance at this stage &mdash; to be confirmed once scope is finalised.</div>';
 }
 
 function renderSections() {
   const wrap = document.getElementById('sections');
-  wrap.innerHTML = SECTIONS.map((s, idx) => {
-    const pct = s.amount / SUBTOTAL * 100;
-    const rateM2 = s.amount / GBA;
-    const isEmpty = s.amount === 0;
+  // Compute unique suppliers per element for badges
+  const elSuppliers = (el) => {
+    const set = new Set();
+    if (el.items) el.items.forEach(i => i.supplier && set.add(i.supplier));
+    if (el.groups && el.groupSupplier) set.add(el.groupSupplier);
+    return [...set];
+  };
+  wrap.innerHTML = ELEMENTS.map((el, idx) => {
+    const pct = el.amount / SUBTOTAL * 100;
+    const rateM2 = el.amount / GBA;
+    const isEmpty = el.amount === 0;
+    const sups = elSuppliers(el).map(s => `<span style="background:${SUPPLIERS[s].colour};width:9px;height:9px;border-radius:50%;display:inline-block;border:1.5px solid #fff;box-shadow:0 0 0 1px ${SUPPLIERS[s].colour}" title="${s}"></span>`).join('');
     return `
-      <div class="section${idx === 0 ? ' open' : ''}" data-section="${s.id}">
+      <div class="section${idx === 0 ? ' open' : ''}" data-element="${el.id}">
         <div class="section-head" onclick="this.parentElement.classList.toggle('open')">
-          <div class="badge" style="background:${s.colour}">${s.id.replace('.0','')}</div>
-          <div class="title">${s.name}</div>
+          <div class="badge" style="background:${el.colour}">${el.id.replace('.0','')}</div>
+          <div class="title">${el.name}</div>
+          <div class="meta-tags">${sups}</div>
           <div class="rate">${isEmpty ? '—' : fmtZAR(rateM2) + ' /m²'}</div>
           <div class="pct">${fmtPct(pct)}</div>
-          <div class="amount">${fmtZAR(s.amount)}</div>
-          <div class="arrow">&#9662;</div>
+          <div class="amount">${fmtZAR(el.amount)}</div>
+          <div class="arrow">▼</div>
         </div>
         <div class="section-body">
-          ${buildItemsTable(s)}
+          ${buildElementBody(el)}
         </div>
       </div>
     `;
@@ -652,8 +1250,10 @@ function renderSections() {
 // ============================================================
 // INIT
 // ============================================================
-renderSummary();
-renderChart();
+renderElementSummary();
+renderElementChart();
+renderSupplierChart();
+renderSupplierTable();
 renderSections();
 </script>
 </body>
