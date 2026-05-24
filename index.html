@@ -606,22 +606,22 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
   <div class="mg">
     <div class="m green">
       <div class="m-label">Sub-Total (ex VAT)</div>
-      <div class="m-value">R 2,371,244</div>
+      <div class="m-value">R 2,423,936</div>
       <div class="m-sub">Net construction works estimate</div>
     </div>
     <div class="m dark">
       <div class="m-label">VAT @ 15%</div>
-      <div class="m-value">R 355,687</div>
+      <div class="m-value">R 363,590</div>
       <div class="m-sub">Output VAT on works</div>
     </div>
     <div class="m yellow">
       <div class="m-label">Total (incl VAT)</div>
-      <div class="m-value">R 2,726,931</div>
+      <div class="m-value">R 2,787,527</div>
       <div class="m-sub">Anticipated final cost</div>
     </div>
     <div class="m">
       <div class="m-label">Rate per m&sup2; (ex VAT)</div>
-      <div class="m-value">R 8,121</div>
+      <div class="m-value">R 8,301</div>
       <div class="m-sub">Across 292 m&sup2; GBA</div>
     </div>
   </div>
@@ -648,21 +648,21 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
       <tfoot>
         <tr class="subtotal-row">
           <td colspan="4"><strong>Sub-Total (excluding VAT)</strong></td>
-          <td class="r"><strong>R 2,371,244.49</strong></td>
+          <td class="r"><strong>R 2,423,936.49</strong></td>
           <td class="r"><strong>100.0%</strong></td>
-          <td class="r"><strong>R 8,120.70</strong></td>
+          <td class="r"><strong>R 8,301.15</strong></td>
         </tr>
         <tr class="vat-row">
           <td colspan="4">VAT @ 15%</td>
-          <td class="r">R 355,686.67</td>
+          <td class="r">R 363,590.47</td>
           <td class="r">&mdash;</td>
-          <td class="r">R 1,218.10</td>
+          <td class="r">R 1,245.17</td>
         </tr>
         <tr class="total-row">
           <td colspan="4"><strong>TOTAL (including VAT)</strong></td>
-          <td class="r"><strong>R 2,726,931.16</strong></td>
+          <td class="r"><strong>R 2,787,526.96</strong></td>
           <td class="r">&mdash;</td>
-          <td class="r"><strong>R 9,338.81</strong></td>
+          <td class="r"><strong>R 9,546.33</strong></td>
         </tr>
       </tfoot>
     </table>
@@ -712,7 +712,7 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
       <tfoot>
         <tr class="subtotal-row">
           <td colspan="3"><strong>Total (excluding VAT)</strong></td>
-          <td class="r"><strong>R 2,371,244.49</strong></td>
+          <td class="r"><strong>R 2,423,936.49</strong></td>
           <td class="r"><strong>100.0%</strong></td>
         </tr>
       </tfoot>
@@ -742,7 +742,7 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
         <li>Preliminaries (Element 10.0) include Builders' Preliminaries (Supervision, Attendance, Transport, H&amp;S) and QS Fee &ndash; Pre-Contract only.</li>
         <li>Provisional Sums (Element 9.0) carry a NIL allowance at this stage. To be confirmed once the scope is finalised.</li>
         <li>Excludes: Professional fees other than QS pre-contract, statutory approvals, occupational health &amp; safety beyond builder allowance, contingencies, and any works not specified.</li>
-        <li>Costs sourced from nominated suppliers: DF Strang (builders work &ndash; estimate), Weeks Interiors (ceilings), Vision D&eacute;cor (furniture), Kingston (joinery), Afrigran (stonework), CW Electrical (electrical), and Tim Brooks (air conditioning).</li>
+        <li>Costs sourced from nominated suppliers: DF Strang (builders work &ndash; estimate), Weeks Interiors (ceilings), Vision D&eacute;cor (internal decor &amp; blinds), Kingston (joinery), Afrigran (stonework), CW Electrical (electrical), and Tim Brooks (air conditioning).</li>
         <li>Issued via the Interior Designer for client review.</li>
       </ol>
     </div>
@@ -789,13 +789,13 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
 // ============================================================
 // DATA — ME 421 ESTIMATE (verbatim from xlsx)
 // ============================================================
-const SUBTOTAL = 2371244.49;
+const SUBTOTAL = 2423936.49;
 const GBA = 292;
 
 const SUPPLIERS = {
   'DF Strang':       { colour: '#1a1a1a', accent: '#dcdc28', short: 'Builders' },
   'Weeks Interiors': { colour: '#6890a4', accent: '#a8c4cf', short: 'Ceilings' },
-  'Vision Décor':    { colour: '#28503c', accent: '#4a7560', short: 'Furniture' },
+  'Vision Décor':    { colour: '#28503c', accent: '#4a7560', short: 'Internal Decor' },
   'Kingston':        { colour: '#8b5a3c', accent: '#a87a55', short: 'Joinery' },
   'Afrigran':        { colour: '#9a8478', accent: '#b8a597', short: 'Stonework' },
   'CW Electrical':   { colour: '#a3503b', accent: '#c46b54', short: 'Electrical' },
@@ -841,8 +841,8 @@ const ELEMENTS = [
     ]
   },
   {
-    id: '4.0', name: 'Movable Furniture / Plants',
-    short: 'Movable Furniture & Plants', amount: 1030310.25, colour: '#28503c', unit: 'm²', qty: 292,
+    id: '4.0', name: 'Internal Decor',
+    short: 'Internal Decor', amount: 840210.25, colour: '#28503c', unit: 'm²', qty: 292,
     items: [
       { ref: '4.1',  desc: 'Artifacts and decor for bar shelving',                                                    unit: 'no', qty: 1,  rate: 21000,    amt: 21000,    supplier: 'Vision Décor', area: 'Bar Area' },
       { ref: '4.2',  desc: 'Framed photography',                                                                       unit: 'no', qty: 2,  rate: 3750,     amt: 7500,     supplier: 'Vision Décor', area: 'Bar Area' },
@@ -855,14 +855,13 @@ const ELEMENTS = [
       { ref: '4.9',  desc: 'Custom raffia wallpaper 23 m x 2.7 height',                                                unit: 'no', qty: 1,  rate: 38812.50, amt: 38812.50, supplier: 'Vision Décor', area: 'Dining Hall' },
       { ref: '4.10', desc: 'Large brass signage',                                                                       unit: 'no', qty: 1,  rate: 14030,    amt: 14030,    supplier: 'Vision Décor', area: 'Dining Hall' },
       { ref: '4.11', desc: 'Custom entrance mirror wall with laser-cut brass detail 4 m x 2.7',                        unit: 'no', qty: 1,  rate: 49289,    amt: 49289,    supplier: 'Vision Décor', area: 'Dining Hall' },
-      { ref: '4.12', desc: 'Artificial plants for mobile and large black planters',                                    unit: 'no', qty: 1,  rate: 126500,   amt: 126500,   supplier: 'Vision Décor', area: 'Dining Hall' },
-      { ref: '4.13', desc: 'Rustic Ellipse Japi Planter (medium)',                                                     unit: 'no', qty: 4,  rate: 1568.18,  amt: 6272.72,  supplier: 'Vision Décor', area: 'Dining Hall' },
-      { ref: '4.14', desc: 'Reupholster existing occasional chairs',                                                   unit: 'no', qty: 2,  rate: 8437.50,  amt: 16875,    supplier: 'Vision Décor', area: 'Dining Hall' },
-      { ref: '4.15', desc: 'Scatter cushion budget for sofa and occasional chairs',                                    unit: 'no', qty: 4,  rate: 1400,     amt: 5600,     supplier: 'Vision Décor', area: 'Dining Hall' },
-      { ref: '4.16', desc: 'Framed photography',                                                                       unit: 'no', qty: 2,  rate: 4673.92,  amt: 9347.84,  supplier: 'Vision Décor', area: 'Dining Hall' },
-      { ref: '4.17', desc: 'Vogue Rechargeable Dimmable Table Lamp Black / Gold',                                      unit: 'no', qty: 22, rate: 782.61,   amt: 17217.42, supplier: 'Vision Décor', area: 'Dining Hall' },
-      { ref: '4.18', desc: 'Elizabeth LED Metal Picture Wall Light Antique Bronze / Satin Nickel',                     unit: 'no', qty: 4,  rate: 869.56,   amt: 3478.24,  supplier: 'Vision Décor', area: 'Dining Hall' },
-      { ref: '4.19', desc: 'Planter Boxes &mdash; oak veneer with monocoat oil, shaker panels, melaply plinths, lower shelf in solid oak', unit: 'no', qty: 1, rate: 193600, amt: 193600, supplier: 'Kingston', area: 'Dining Hall' }
+      { ref: '4.12', desc: 'Rustic Ellipse Japi Planter (medium)',                                                     unit: 'no', qty: 4,  rate: 1568.18,  amt: 6272.72,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.13', desc: 'Reupholster existing occasional chairs',                                                   unit: 'no', qty: 2,  rate: 8437.50,  amt: 16875,    supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.14', desc: 'Scatter cushion budget for sofa and occasional chairs',                                    unit: 'no', qty: 4,  rate: 1400,     amt: 5600,     supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.15', desc: 'Framed photography',                                                                       unit: 'no', qty: 2,  rate: 4673.92,  amt: 9347.84,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.16', desc: 'Vogue Rechargeable Dimmable Table Lamp Black / Gold',                                      unit: 'no', qty: 22, rate: 782.61,   amt: 17217.42, supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.17', desc: 'Elizabeth LED Metal Picture Wall Light Antique Bronze / Satin Nickel',                     unit: 'no', qty: 4,  rate: 869.56,   amt: 3478.24,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '4.18', desc: 'New planter box price including artificial plants',                                         unit: 'no', qty: 1,  rate: 130000,   amt: 130000,   supplier: 'Vision Décor', area: 'Dining Hall' }
     ]
   },
   {
@@ -940,9 +939,11 @@ const ELEMENTS = [
     ]
   },
   {
-    id: '9.0', name: 'Provisional Sums',
-    short: 'Provisional Sums', amount: 0, colour: '#cccccc', unit: 'm²', qty: 292,
-    items: []
+    id: '9.0', name: 'Blinds',
+    short: 'Blinds', amount: 242792, colour: '#7a8a6e', unit: 'm²', qty: 292,
+    items: [
+      { ref: '9.1', desc: 'Spring Loaded Slidetrack (without motor) Blind', unit: 'no', qty: 8, rate: 30349, amt: 242792, supplier: 'Vision Décor', area: 'Dining Hall' }
+    ]
   },
   {
     id: '10.0', name: 'Preliminaries',
