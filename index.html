@@ -789,7 +789,7 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
 // ============================================================
 // DATA — ME 421 ESTIMATE (verbatim from xlsx)
 // ============================================================
-const SUBTOTAL = 2423936.49;
+const SUBTOTAL = 2509332.49;
 const GBA = 292;
 
 const SUPPLIERS = {
@@ -940,9 +940,10 @@ const ELEMENTS = [
   },
   {
     id: '9.0', name: 'Blinds',
-    short: 'Blinds', amount: 242792, colour: '#7a8a6e', unit: 'm²', qty: 292,
+    short: 'Blinds', amount: 328188, colour: '#7a8a6e', unit: 'm²', qty: 292,
     items: [
-      { ref: '9.1', desc: 'Spring Loaded Slidetrack (without motor) Blind', unit: 'no', qty: 8, rate: 30349, amt: 242792, supplier: 'Vision Décor', area: 'Dining Hall' }
+      { ref: '9.1', desc: 'Slidetrack Blind 2800 × 2200 mm — motorised package (fully installed, incl. motors, remotes, 50 mm posts, cleaner & installation)', unit: 'no', qty: 9, rate: 36465.33, amt: 328188, supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '9.2', desc: 'Alternative — Manual (non-motorised) Slidetrack Blind package (pull stick & holder in lieu of motors) — not included in total', unit: 'no', qty: 9, rate: 28628.67, amt: 257658, supplier: 'Vision Décor', area: 'Dining Hall', alternative: true }
     ]
   },
   {
@@ -1165,15 +1166,19 @@ function buildElementBody(el) {
     `;
     const rows = el.items.map(i => {
       const notesBlock = i.notes ? `<div style="margin-top:6px;font-size:0.72rem;color:var(--muted);line-height:1.5">${i.notes.map(n => '• ' + n).join('<br>')}</div>` : '';
+      const altRow = i.alternative ? 'color:var(--muted);font-style:italic;background:#fafaf6' : '';
+      const altRate = i.alternative && i.rate ? `(${fmtZAR(i.rate)})` : (i.rate ? fmtZAR(i.rate) : '');
+      const altAmt = i.alternative ? `(${fmtZAR(i.amt)})` : fmtZAR(i.amt);
+      const amtWeight = i.alternative ? '500' : '700';
       return `
-        <tr>
+        <tr style="${altRow}">
           <td style="font-weight:700;color:var(--green-d);font-size:0.78rem">${i.ref || ''}</td>
           ${hasArea ? `<td style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--teal-d);font-weight:700">${i.area || ''}</td>` : ''}
           <td>${i.desc}${notesBlock}</td>
           <td class="c" style="font-size:0.72rem;color:var(--muted)">${i.unit || ''}</td>
           <td class="r">${fmtQty(i.qty)}</td>
-          <td class="r">${i.rate ? fmtZAR(i.rate) : ''}</td>
-          <td class="r" style="font-weight:700">${fmtZAR(i.amt)}</td>
+          <td class="r">${altRate}</td>
+          <td class="r" style="font-weight:${amtWeight}">${altAmt}</td>
           <td>${supTag(i.supplier)}</td>
         </tr>
       `;
