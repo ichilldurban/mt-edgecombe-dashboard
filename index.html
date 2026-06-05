@@ -606,22 +606,22 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
   <div class="mg">
     <div class="m green">
       <div class="m-label">Sub-Total (ex VAT)</div>
-      <div class="m-value">R 2,423,936</div>
+      <div class="m-value">R 2,509,332</div>
       <div class="m-sub">Net construction works estimate</div>
     </div>
     <div class="m dark">
       <div class="m-label">VAT @ 15%</div>
-      <div class="m-value">R 363,590</div>
+      <div class="m-value">R 376,400</div>
       <div class="m-sub">Output VAT on works</div>
     </div>
     <div class="m yellow">
       <div class="m-label">Total (incl VAT)</div>
-      <div class="m-value">R 2,787,527</div>
+      <div class="m-value">R 2,885,732</div>
       <div class="m-sub">Anticipated final cost</div>
     </div>
     <div class="m">
       <div class="m-label">Rate per m&sup2; (ex VAT)</div>
-      <div class="m-value">R 8,301</div>
+      <div class="m-value">R 8,594</div>
       <div class="m-sub">Across 292 m&sup2; GBA</div>
     </div>
   </div>
@@ -648,9 +648,9 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
       <tfoot>
         <tr class="subtotal-row">
           <td colspan="4"><strong>Sub-Total (excluding VAT)</strong></td>
-          <td class="r"><strong>R 2,423,936.49</strong></td>
+          <td class="r"><strong>R 2,509,332.49</strong></td>
           <td class="r"><strong>100.0%</strong></td>
-          <td class="r"><strong>R 8,301.15</strong></td>
+          <td class="r"><strong>R 8,593.61</strong></td>
         </tr>
         <tr class="vat-row">
           <td colspan="4">VAT @ 15%</td>
@@ -683,7 +683,7 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
     <div class="card">
       <div class="card-h">
         <h2>Cost Split by Nominated Supplier</h2>
-        <span class="h-sub">7 nominated parties</span>
+        <span class="h-sub">8 nominated parties</span>
       </div>
       <div class="card-b">
         <div class="chart-wrap"><canvas id="supplierChart"></canvas></div>
@@ -712,7 +712,7 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
       <tfoot>
         <tr class="subtotal-row">
           <td colspan="3"><strong>Total (excluding VAT)</strong></td>
-          <td class="r"><strong>R 2,423,936.49</strong></td>
+          <td class="r"><strong>R 2,509,332.49</strong></td>
           <td class="r"><strong>100.0%</strong></td>
         </tr>
       </tfoot>
@@ -965,6 +965,7 @@ ELEMENTS.forEach(el => {
     el.items.forEach(it => {
       const s = it.supplier;
       if (!s) return;
+      if (it.alternative) return; // alternatives are informational only — not summed
       SUPPLIER_TOTALS[s] = (SUPPLIER_TOTALS[s] || 0) + it.amt;
       SUPPLIER_COUNTS[s] = (SUPPLIER_COUNTS[s] || 0) + 1;
     });
