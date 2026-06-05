@@ -742,7 +742,7 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
         <li>Preliminaries (Element 10.0) include Builders' Preliminaries (Supervision, Attendance, Transport, H&amp;S) and QS Fee &ndash; Pre-Contract only.</li>
         <li>Provisional Sums (Element 9.0) carry a NIL allowance at this stage. To be confirmed once the scope is finalised.</li>
         <li>Excludes: Professional fees other than QS pre-contract, statutory approvals, occupational health &amp; safety beyond builder allowance, contingencies, and any works not specified.</li>
-        <li>Costs sourced from nominated suppliers: DF Strang (builders work &ndash; estimate), Weeks Interiors (ceilings), Vision D&eacute;cor (internal decor &amp; blinds), Kingston (joinery), Afrigran (stonework), CW Electrical (electrical), and Tim Brooks (air conditioning).</li>
+        <li>Costs sourced from nominated suppliers: DF Strang (builders work &ndash; estimate), Weeks Interiors (ceilings), Vision D&eacute;cor (internal decor), Cool Living (blinds), Kingston (joinery), Afrigran (stonework), CW Electrical (electrical), and Tim Brooks (air conditioning).</li>
         <li>Issued via the Interior Designer for client review.</li>
       </ol>
     </div>
@@ -796,6 +796,7 @@ const SUPPLIERS = {
   'DF Strang':       { colour: '#1a1a1a', accent: '#dcdc28', short: 'Builders' },
   'Weeks Interiors': { colour: '#6890a4', accent: '#a8c4cf', short: 'Ceilings' },
   'Vision Décor':    { colour: '#28503c', accent: '#4a7560', short: 'Internal Decor' },
+  'Cool Living':     { colour: '#3a8275', accent: '#5ca599', short: 'Blinds' },
   'Kingston':        { colour: '#8b5a3c', accent: '#a87a55', short: 'Joinery' },
   'Afrigran':        { colour: '#9a8478', accent: '#b8a597', short: 'Stonework' },
   'CW Electrical':   { colour: '#a3503b', accent: '#c46b54', short: 'Electrical' },
@@ -942,8 +943,8 @@ const ELEMENTS = [
     id: '9.0', name: 'Blinds',
     short: 'Blinds', amount: 328188, colour: '#7a8a6e', unit: 'm²', qty: 292,
     items: [
-      { ref: '9.1', desc: 'Slidetrack Blind 2800 × 2200 mm — motorised package (fully installed, incl. motors, remotes, 50 mm posts, cleaner & installation)', unit: 'no', qty: 9, rate: 36465.33, amt: 328188, supplier: 'Vision Décor', area: 'Dining Hall' },
-      { ref: '9.2', desc: 'Alternative — Manual (non-motorised) Slidetrack Blind package (pull stick & holder in lieu of motors) — not included in total', unit: 'no', qty: 9, rate: 28628.67, amt: 257658, supplier: 'Vision Décor', area: 'Dining Hall', alternative: true }
+      { ref: '9.1', desc: 'Slidetrack Blind 2800 × 2200 mm — motorised package (fully installed, incl. motors, remotes, 50 mm posts, cleaner & installation)', unit: 'no', qty: 9, rate: 36465.33, amt: 328188, supplier: 'Cool Living', area: 'Dining Hall' },
+      { ref: '9.2', desc: 'Alternative — Manual (non-motorised) Slidetrack Blind package (pull stick & holder in lieu of motors) — not included in total', unit: 'no', qty: 9, rate: 28628.67, amt: 257658, supplier: 'Cool Living', area: 'Dining Hall', alternative: true }
     ]
   },
   {
