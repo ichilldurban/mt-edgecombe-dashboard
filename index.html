@@ -319,6 +319,7 @@ tr:last-child td { border-bottom: none; }
   margin-bottom: 20px;
 }
 @media (max-width: 980px) { .split { grid-template-columns: 1fr; } }
+.split.one-col { grid-template-columns: 1fr; }
 .chart-wrap { position: relative; height: 320px; padding: 14px 4px; }
 .legend { display: flex; flex-wrap: wrap; gap: 10px 16px; padding: 8px 4px 4px; }
 .legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.72rem; color: var(--ink-2); }
@@ -719,11 +720,11 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
     </div>
   </div>
 
-  <!-- ===== ELEMENT SUMMARY ===== -->
-  <div class="card">
+  <!-- ===== ELEMENT SUMMARY (Superseded view only) ===== -->
+  <div class="card" id="elementSummaryCard">
     <div class="card-h">
       <h2>Element Summary</h2>
-      <span class="h-sub">10 elements &middot; 292 m&sup2; GBA</span>
+      <span class="h-sub" id="elementCountLabel">10 elements &middot; 292 m&sup2; GBA</span>
     </div>
     <table>
       <thead>
@@ -747,23 +748,23 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
         </tr>
         <tr class="vat-row">
           <td colspan="4">VAT @ 15%</td>
-          <td class="r">R 363,590.47</td>
+          <td class="r" id="elsum-foot-vat">R 376,399.87</td>
           <td class="r">&mdash;</td>
-          <td class="r">R 1,245.17</td>
+          <td class="r" id="elsum-foot-vat-rate">R 1,289.04</td>
         </tr>
         <tr class="total-row">
           <td colspan="4"><strong>TOTAL (including VAT)</strong></td>
-          <td class="r"><strong>R 2,787,526.96</strong></td>
+          <td class="r"><strong id="elsum-foot-total-incl">R 2,885,732.36</strong></td>
           <td class="r">&mdash;</td>
-          <td class="r"><strong>R 9,546.33</strong></td>
+          <td class="r"><strong id="elsum-foot-total-rate">R 9,882.65</strong></td>
         </tr>
       </tfoot>
     </table>
   </div>
 
   <!-- ===== CHARTS ===== -->
-  <div class="split">
-    <div class="card">
+  <div class="split" id="chartsSplit">
+    <div class="card" id="elementChartCard">
       <div class="card-h">
         <h2>Cost Split by Element</h2>
         <span class="h-sub">% of sub-total</span>
@@ -815,8 +816,8 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
   <!-- ===== DETAILED BREAKDOWN ===== -->
   <div class="card" style="background:transparent;border:none;box-shadow:none">
     <div class="card-h" style="background:transparent;border:none;padding:0 0 12px">
-      <h2 style="font-size:1.2rem">Detailed Breakdown by Element</h2>
-      <span class="h-sub">Click any element to expand line items &middot; supplier shown per row</span>
+      <h2 style="font-size:1.2rem" id="breakdownTitle">Detailed Breakdown by Element</h2>
+      <span class="h-sub" id="breakdownSub">Click any element to expand line items &middot; supplier shown per row</span>
     </div>
     <div id="sections"></div>
   </div>
@@ -899,7 +900,8 @@ const SUPPLIERS = {
   'Kingston':        { colour: '#8b5a3c', accent: '#a87a55', short: 'Joinery' },
   'Afrigran':        { colour: '#9a8478', accent: '#b8a597', short: 'Stonework' },
   'CW Electrical':   { colour: '#a3503b', accent: '#c46b54', short: 'Electrical' },
-  'Tim Brooks':      { colour: '#5b9aa0', accent: '#7eb5bb', short: 'Air Con' }
+  'Tim Brooks':      { colour: '#5b9aa0', accent: '#7eb5bb', short: 'Air Con' },
+  'GT Aluminium':    { colour: '#8a98a3', accent: '#aebac3', short: 'Aluminium' }
 };
 
 const _BASE_ELEMENTS = [
@@ -1061,15 +1063,206 @@ const _BASE_ELEMENTS = [
 // ============================================================
 const DATA_SUPERSEDED = {
   label: 'Superseded',
+  viewMode: 'element',
   SUBTOTAL: SUBTOTAL_BASE,
   GBA: GBA_BASE,
   ELEMENTS: _BASE_ELEMENTS
 };
+
+// ============================================================
+// REV 1 (CURRENT) — grouped by SUPPLIER, not by ASAQS element.
+// Source quotes (all excl VAT) — see Rev 1 quotes folder, issued 24 Jun 2026.
+// ============================================================
+const REV1_ELEMENTS = [
+  {
+    id: '1', name: 'DF Strang Buildings',
+    short: 'DF Strang', amount: 294447.75, colour: '#1a1a1a',
+    unit: 'item', qty: 1,
+    quoteRef: 'Strang Estimate Rev 1 (xlsx)',
+    items: [
+      { ref: '1.1',  desc: 'Allowance for minor alterations and preparation works to new bar area',                          unit: 'item',     qty: 1,     rate: 15000,    amt: 15000,    supplier: 'DF Strang' },
+      { ref: '1.2',  desc: 'Remove existing tiles to dining area and cart away',                                             unit: 'm²',       qty: 24,    rate: 200,      amt: 4800,     supplier: 'DF Strang' },
+      { ref: '1.3',  desc: 'New plumbing provision to Bar area',                                                             unit: 'Prov Sum', qty: 1,     rate: 13500,    amt: 13500,    supplier: 'DF Strang' },
+      { ref: '1.4',  desc: 'Provision for new prep bowl, tap, waste and trap (sanware / brassware)',                         unit: 'Prov Sum', qty: 1,     rate: 6000,     amt: 6000,     supplier: 'DF Strang' },
+      { ref: '1.5',  desc: 'Allowance for alteration works around entrance to kitchen as required',                          unit: 'Prov Sum', qty: 1,     rate: 5000,     amt: 5000,     supplier: 'DF Strang' },
+      { ref: '1.6',  desc: 'Provision for new solid timber doors incl. ironmongery to kitchen',                              unit: 'Prov Sum', qty: 1,     rate: 30000,    amt: 30000,    supplier: 'DF Strang' },
+      { ref: '1.7',  desc: 'Detail for aluminium windows / doors (provision)',                                               unit: 'Prov Sum', qty: 1,     rate: 20000,    amt: 20000,    supplier: 'DF Strang' },
+      { ref: '1.8',  desc: 'Provision for carting away of rubble',                                                           unit: 'Prov Sum', qty: 1,     rate: 20000,    amt: 20000,    supplier: 'DF Strang' },
+      { ref: '1.9',  desc: 'Paint to ceilings, bulkheads and cornices (incl. bathroom ceilings)',                            unit: 'm²',       qty: 464.2, rate: 75,       amt: 34815,    supplier: 'DF Strang' },
+      { ref: '1.10', desc: 'Internal paint to walls incl. bathroom',                                                         unit: 'm²',       qty: 280.5, rate: 75,       amt: 21037.50, supplier: 'DF Strang' },
+      { ref: '1.11', desc: 'Builders preliminaries (supervision, attendance, transport, H&S)',                               unit: 'Sum',      qty: 1,     rate: 75000,    amt: 75000,    supplier: 'DF Strang' },
+      { ref: '1.12', desc: 'Attendance on subcontractors (5% of R285,905 subcontract value)',                                unit: '%',        qty: 5,     rate: 2859.05,  amt: 14295.25, supplier: 'DF Strang' },
+      { ref: '1.13', desc: 'QS Fee — Pre-Contract',                                                                          unit: 'Sum',      qty: 1,     rate: 20000,    amt: 20000,    supplier: 'DF Strang' },
+      { ref: '1.14', desc: 'QS Fee — During-Contract',                                                                       unit: 'Sum',      qty: 1,     rate: 15000,    amt: 15000,    supplier: 'DF Strang' }
+    ]
+  },
+  {
+    id: '2', name: 'Vision by Milstead & Hayter',
+    short: 'Vision Décor', amount: 1241884.89, colour: '#28503c',
+    unit: 'item', qty: 1,
+    quoteRef: 'QT100774 (Revision C)',
+    items: [
+      { ref: '2.1',  desc: 'Artifacts and decor for bar shelving',                                                            unit: 'no', qty: 1,  rate: 21000,    amt: 21000,     supplier: 'Vision Décor', area: 'Bar Area' },
+      { ref: '2.2',  desc: 'Framed photography — bar area',                                                                   unit: 'no', qty: 2,  rate: 3750,     amt: 7500,      supplier: 'Vision Décor', area: 'Bar Area' },
+      { ref: '2.3',  desc: 'Fix mirror behind existing vanity',                                                               unit: 'no', qty: 1,  rate: 15617,    amt: 15617,     supplier: 'Vision Décor', area: 'Bathroom' },
+      { ref: '2.4',  desc: 'Artifacts and decor for bathroom',                                                                unit: 'no', qty: 1,  rate: 28000,    amt: 28000,     supplier: 'Vision Décor', area: 'Bathroom' },
+      { ref: '2.5',  desc: 'Wallpaper in toilet area',                                                                        unit: 'm',  qty: 15, rate: 2100,     amt: 31500,     supplier: 'Vision Décor', area: 'Bathroom' },
+      { ref: '2.6',  desc: 'Moka Dining Base',                                                                                unit: 'no', qty: 26, rate: 2749.75,  amt: 71493.50,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.7',  desc: '900 × 900 mm Timber Top',                                                                         unit: 'no', qty: 14, rate: 4336.54,  amt: 60711.56,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.8',  desc: 'Arusha Dining Chair',                                                                             unit: 'no', qty: 84, rate: 3831.64,  amt: 321857.76, supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.9',  desc: 'Custom palm wallpaper in entrance and buffet area (incl. installation)',                          unit: 'no', qty: 1,  rate: 30225.09, amt: 30225.09,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.10', desc: 'Custom raffia wallpaper 23 m × 2.7 m height (incl. installation)',                                unit: 'no', qty: 1,  rate: 38812.50, amt: 38812.50,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.11', desc: 'Large brass signage (incl. installation)',                                                        unit: 'no', qty: 1,  rate: 14030,    amt: 14030,     supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.12', desc: 'Custom entrance mirror wall with laser-cut brass detail 4 m × 2.7 m',                             unit: 'no', qty: 1,  rate: 49289,    amt: 49289,     supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.13', desc: 'Mobile planters and artificial plants',                                                           unit: 'no', qty: 6,  rate: 15000,    amt: 90000,     supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.14', desc: 'Rustic Ellipse Japi Planter (medium)',                                                            unit: 'no', qty: 4,  rate: 4611.65,  amt: 18446.60,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.15', desc: 'Reupholster existing occasional chairs',                                                          unit: 'no', qty: 2,  rate: 8437.50,  amt: 16875,     supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.16', desc: 'Scatter cushion budget for sofa and occasional chairs',                                           unit: 'no', qty: 4,  rate: 1400,     amt: 5600,      supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.17', desc: 'Framed photography — dining hall',                                                                unit: 'no', qty: 5,  rate: 4673.91,  amt: 23369.55,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.18', desc: 'Vogue Rechargeable Dimmable Table Lamp (black / gold)',                                           unit: 'no', qty: 22, rate: 782.61,   amt: 17217.42,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.19', desc: 'Elizabeth LED Metal Picture Wall Light (antique bronze / satin nickel)',                          unit: 'no', qty: 5,  rate: 869.56,   amt: 4347.80,   supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.20', desc: '2.4 m × 900 mm pill-shaped solid oak table tops',                                                 unit: 'no', qty: 6,  rate: 11050,    amt: 66300,     supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.21', desc: 'Custom booth seating (incl. fabric and upholstery)',                                              unit: 'no', qty: 4,  rate: 36313.55, amt: 145254.20, supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.22', desc: 'Mobile planter boxes',                                                                            unit: 'no', qty: 6,  rate: 5300,     amt: 31800,     supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.23', desc: 'Occasional chairs',                                                                               unit: 'no', qty: 6,  rate: 11625,    amt: 69750,     supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.24', desc: 'Coffee tables',                                                                                   unit: 'no', qty: 3,  rate: 8521.73,  amt: 25565.19,  supplier: 'Vision Décor', area: 'Dining Hall' },
+      { ref: '2.25', desc: 'Belgotex Serengeti commercial carpet',                                                            unit: 'item', qty: 1, rate: 37322.72, amt: 37322.72, supplier: 'Vision Décor', area: 'Dining Hall' }
+    ]
+  },
+  {
+    id: '3', name: 'Afrigran — Granite & Marble Designs',
+    short: 'Afrigran', amount: 393139.13, colour: '#9a8478',
+    unit: 'item', qty: 1,
+    quoteRef: 'QN-87810 (23 Jun 2026)',
+    items: [
+      { ref: '3.1', desc: 'Higher / lower bar tops & splashback — Vanilla Noir CaesarStone 5100, 20 mm built-up, fancy edge with build-up & square-round to lower & back counter',  unit: 'item', qty: 1, rate: 173980, amt: 173980,    supplier: 'Afrigran', area: 'Bar' },
+      { ref: '3.2', desc: 'Server top 5000 × 950 mm & server on casters 650 mm wide with groove for surface — Moorland Fog CaesarStone 6046, 20 mm, square-round',                   unit: 'item', qty: 1, rate: 156680, amt: 156680,    supplier: 'Afrigran', area: 'Server' },
+      { ref: '3.3', desc: '2 × niches for server tops (350 mm high × 350 mm deep) — top, bottom, back & side panels — Moorland Fog CaesarStone 6046, 20 mm, square-round',           unit: 'item', qty: 1, rate: 62479.13, amt: 62479.13, supplier: 'Afrigran', area: 'Server' }
+    ]
+  },
+  {
+    id: '4', name: 'Weeks Interiors',
+    short: 'Weeks Interiors', amount: 391573.60, colour: '#6890a4',
+    unit: 'item', qty: 1,
+    quoteRef: '57/26 (17 Jun 2026)',
+    items: [
+      { ref: '4.1',  desc: 'Strip existing ceiling boards, assess and carry out remedial works to existing grid structure for new ceiling installation', unit: 'm²', qty: 284.6, rate: 125, amt: 35575,    supplier: 'Weeks Interiors' },
+      { ref: '4.2',  desc: 'Strip existing bulkheads to allow for new coffer design',                                                                      unit: 'm',  qty: 106.4, rate: 85,  amt: 9044,     supplier: 'Weeks Interiors' },
+      { ref: '4.3',  desc: '600 × 600 mm exposed-tee suspended ceilings with AMF Thermofon acoustic tile and expanded mesh per Capco spec',               unit: 'm²', qty: 219.84,rate: 715, amt: 157185.60,supplier: 'Weeks Interiors' },
+      { ref: '4.4',  desc: '9.5 mm flush plastered suspended ceiling to areas not receiving exposed-tee ceilings',                                        unit: 'm²', qty: 49,    rate: 265, amt: 12985,    supplier: 'Weeks Interiors' },
+      { ref: '4.5',  desc: '20 mm Sigma shadowline to perimeter coffer and wall junction',                                                                unit: 'm',  qty: 70,    rate: 85,  amt: 5950,     supplier: 'Weeks Interiors' },
+      { ref: '4.6',  desc: 'SM25 / M6 perimeter trim fixed to side of coffer',                                                                            unit: 'm',  qty: 268.2, rate: 75,  amt: 20115,    supplier: 'Weeks Interiors' },
+      { ref: '4.7',  desc: '380 × 250 mm bulkhead coffers',                                                                                               unit: 'm',  qty: 197.4, rate: 685, amt: 135219,   supplier: 'Weeks Interiors' },
+      { ref: '4.8',  desc: 'Recessed light trough wash light bulkhead to buffet service walls',                                                           unit: 'm',  qty: 14,    rate: 750, amt: 10500,    supplier: 'Weeks Interiors' },
+      { ref: '4.9',  desc: 'Preliminaries & General',                                                                                                     unit: 'Sum',qty: 1,     rate: 5000,amt: 5000,     supplier: 'Weeks Interiors' }
+    ]
+  },
+  {
+    id: '5', name: 'Kingston Kitchens',
+    short: 'Kingston', amount: 366500, colour: '#8b5a3c',
+    unit: 'item', qty: 1,
+    quoteRef: 'Quote 3',
+    items: [
+      { ref: '5.1', desc: 'Bar — white melamine carcasses, melaply to water areas & plinths, island with curves in shaker panels, 22 mm supawood shaker doors, oak-veneer double-bonded shelves & uprights in monocoat oil, plain mirror, Grass Novapro 1 soft-close runners & hinges (white), LED routering included', unit: 'item', qty: 1, rate: 195700, amt: 195700, supplier: 'Kingston', area: 'Bar' },
+      { ref: '5.2', desc: 'Fixed server — closed carcasses in white melamine and open carcasses in oak veneer with monocoat oil, 22 mm oak-veneer shaker panel doors with monocoat oil',                                                                                                                                  unit: 'item', qty: 1, rate: 93800,  amt: 93800,  supplier: 'Kingston', area: 'Server' },
+      { ref: '5.3', desc: 'Server on castors — closed carcasses in white melamine and open carcasses in oak veneer, castors (fridge functionality TBD), 22 mm oak-veneer shaker panel doors with monocoat oil',                                                                                                          unit: 'item', qty: 1, rate: 77000,  amt: 77000,  supplier: 'Kingston', area: 'Server' }
+    ]
+  },
+  {
+    id: '6', name: 'Cool Living',
+    short: 'Cool Living', amount: 328188, colour: '#3a8275',
+    unit: 'item', qty: 1,
+    quoteRef: 'CLDQ261303 (motorised) · CLDQ261302 (manual alternative)',
+    items: [
+      { ref: '6.1', desc: 'Slidetrack Blind 2800 × 2200 mm — Outlook fabric, white powder coat, with pelmet',                                                  unit: 'no',   qty: 9,  rate: 24302, amt: 218718, supplier: 'Cool Living', area: 'Dining Hall' },
+      { ref: '6.2', desc: 'MAESTRIA + 50 IO 25/17 Motor (part 1114280)',                                                                                       unit: 'no',   qty: 9,  rate: 7400,  amt: 66600,  supplier: 'Cool Living', area: 'Dining Hall' },
+      { ref: '6.3', desc: 'SITUO 5 IO PURE II — SC Remote (part 1870330)',                                                                                     unit: 'no',   qty: 3,  rate: 2100,  amt: 6300,   supplier: 'Cool Living', area: 'Dining Hall' },
+      { ref: '6.4', desc: '50 mm square post × 6 m',                                                                                                           unit: 'no',   qty: 18, rate: 1400,  amt: 25200,  supplier: 'Cool Living', area: 'Dining Hall' },
+      { ref: '6.5', desc: 'Blind cleaner',                                                                                                                     unit: 'no',   qty: 3,  rate: 190,   amt: 570,    supplier: 'Cool Living', area: 'Dining Hall' },
+      { ref: '6.6', desc: 'Delivery & installation',                                                                                                           unit: 'item', qty: 1,  rate: 10800, amt: 10800,  supplier: 'Cool Living', area: 'Dining Hall' },
+      { ref: 'ALT', desc: 'Alternative — Manual (non-motorised) Slidetrack Blind package (pull stick & holder in lieu of motors · ref CLDQ261302) — not included in total', unit: 'no', qty: 9, rate: 28628.67, amt: 257658, supplier: 'Cool Living', area: 'Dining Hall', alternative: true }
+    ]
+  },
+  {
+    id: '7', name: 'CW Electrical',
+    short: 'CW Electrical', amount: 130775, colour: '#a3503b',
+    unit: 'item', qty: 1,
+    quoteRef: '3455 Revised (19 Jun 2026)',
+    groupSupplier: 'CW Electrical',
+    groups: [
+      { title: 'Entrance / New Bar & Coffee Station', items: [
+        { ref: '7.1',  desc: 'Downlighter points — acoustic panels (entrance)',                                            qty: 12, rate: 345,  amt: 4140 },
+        { ref: '7.2',  desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 12, rate: 215,  amt: 2580 },
+        { ref: '7.3',  desc: 'LED strip light point — wooden panelling feature (entrance)',                                qty: 1,  rate: 895,  amt: 895  },
+        { ref: '7.4',  desc: '10 W warm-white solid-line LED strip + surface aluminium profile & perspex covers, 120 W 24 V driver', qty: 1, rate: 2395, amt: 2395 },
+        { ref: '7.5',  desc: 'Plug points — above counter (new bar)',                                                      qty: 3,  rate: 895,  amt: 2685 },
+        { ref: '7.6',  desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 3,  rate: 305,  amt: 915  },
+        { ref: '7.7',  desc: 'Plug point — fridges (new bar)',                                                             qty: 1,  rate: 895,  amt: 895  },
+        { ref: '7.8',  desc: 'Legrand Ysalis white double socket',                                                         qty: 1,  rate: 295,  amt: 295  },
+        { ref: '7.9',  desc: 'Downlighter points (new bar)',                                                               qty: 3,  rate: 345,  amt: 1035 },
+        { ref: '7.10', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 3,  rate: 215,  amt: 645  },
+        { ref: '7.11', desc: 'LED strip light points — bar shelves / cabinetry',                                           qty: 12, rate: 395,  amt: 4740 },
+        { ref: '7.12', desc: '10 W warm-white solid-line LED strip + flush aluminium profile & perspex covers, 200 W 24 V driver', qty: 1, rate: 2895, amt: 2895 },
+        { ref: '7.13', desc: 'Ceiling speaker points — relocated to new positions',                                        qty: 2,  rate: 295,  amt: 590  }
+      ]},
+      { title: 'Main Seated Area', items: [
+        { ref: '7.14', desc: 'Downlighter points — acoustic panels',                                                       qty: 72, rate: 345,  amt: 24840 },
+        { ref: '7.15', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 72, rate: 215,  amt: 15480 },
+        { ref: '7.16', desc: 'Ceiling fan points — wire / brace plus assemble and install',                                qty: 4,  rate: 795,  amt: 3180  },
+        { ref: '7.17', desc: 'Zebbies rattan ceiling fans plus remotes / batteries',                                       qty: 4,  rate: 5000, amt: 20000 },
+        { ref: '7.18', desc: 'Ceiling speaker points — relocated to new positions',                                        qty: 5,  rate: 295,  amt: 1475  },
+        { ref: '7.19', desc: 'Plug points — two booth seats',                                                              qty: 4,  rate: 895,  amt: 3580  },
+        { ref: '7.20', desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 4,  rate: 305,  amt: 1220  },
+        { ref: '7.21', desc: 'Plug points — mobile buffet table',                                                          qty: 2,  rate: 895,  amt: 1790  },
+        { ref: '7.22', desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 2,  rate: 305,  amt: 610   }
+      ]},
+      { title: 'Slanted-Ceiling Glass Verandah Seated Area', items: [
+        { ref: '7.23', desc: 'Downlighter points — acoustic panels',                                                       qty: 24, rate: 345,  amt: 8280  },
+        { ref: '7.24', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 24, rate: 215,  amt: 5160  },
+        { ref: '7.25', desc: 'Auto blind 15 A single plug points',                                                         qty: 7,  rate: 795,  amt: 5565  }
+      ]},
+      { title: 'New Server', items: [
+        { ref: '7.26', desc: 'Plug points — counter / wall',                                                               qty: 4,  rate: 895,  amt: 3580  },
+        { ref: '7.27', desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 4,  rate: 305,  amt: 1220  },
+        { ref: '7.28', desc: 'Downlighter points — acoustic panels',                                                       qty: 7,  rate: 345,  amt: 2415  },
+        { ref: '7.29', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 7,  rate: 215,  amt: 1505  },
+        { ref: '7.30', desc: 'LED strip light point — granite overhang serving counter',                                   qty: 1,  rate: 895,  amt: 895   },
+        { ref: '7.31', desc: '10 W warm-white solid-line LED strip + flush aluminium profile & perspex covers, 200 W 24 V driver', qty: 1, rate: 2650, amt: 2650 }
+      ]},
+      { title: 'General', items: [
+        { ref: '7.32', desc: 'Strip out and remove all electrical fittings from ceilings — boards removed, framework to remain', qty: 1, rate: 2625, amt: 2625 }
+      ]}
+    ]
+  },
+  {
+    id: '8', name: 'GT Aluminium',
+    short: 'GT Aluminium', amount: 95230, colour: '#8a98a3',
+    unit: 'item', qty: 1,
+    quoteRef: 'J13517 (24 Jun 2026)',
+    items: [
+      { ref: '8.1', desc: '2-pane Palace sliding door with E-Track centre locking, fitted on inside of shopfront façade, 100 mm box section both sides, 12 fixeds + 2 sliders with arch stuck on in & out', unit: 'no',   qty: 1, rate: 64166.67, amt: 64166.67, supplier: 'GT Aluminium' },
+      { ref: '8.2', desc: 'Shopfront window — mullions with 38 mm flat stuck on horizontally in & out at 1000 mm from bottom + R4 — 10 fixeds',                                                              unit: 'no',   qty: 1, rate: 24833.33, amt: 24833.33, supplier: 'GT Aluminium' },
+      { ref: '8.3', desc: 'Shopfront window — mullions with 38 mm flat stuck on horizontally in & out at 1000 mm from bottom + R4 — 2 fixeds',                                                               unit: 'no',   qty: 1, rate: 6000,     amt: 6000,     supplier: 'GT Aluminium' },
+      { ref: '8.4', desc: 'Glazing certificate (issued on full settlement)',                                                                                                                                 unit: 'item', qty: 1, rate: 230,      amt: 230,      supplier: 'GT Aluminium' }
+    ]
+  },
+  {
+    id: '9', name: 'Tim Brooks Airconditioning',
+    short: 'Tim Brooks', amount: 59900, colour: '#5b9aa0',
+    unit: 'item', qty: 1,
+    quoteRef: 'Q5601 (03 Mar 2026)',
+    items: [
+      { ref: '9.1', desc: 'Supply and install 18 × replacement 600 × 600 mm ceiling diffusers (12 × supply air, 6 × return air with Thermoboard plenums and filters), custom-made steel powder-coated satin white per plan', unit: 'item', qty: 1, rate: 59900, amt: 59900, supplier: 'Tim Brooks' }
+    ]
+  }
+];
+
 const DATA_CURRENT = {
   label: 'Current',
-  SUBTOTAL: SUBTOTAL_BASE,
+  viewMode: 'supplier',
+  SUBTOTAL: 3301638.37,
   GBA: GBA_BASE,
-  ELEMENTS: JSON.parse(JSON.stringify(_BASE_ELEMENTS))
+  ELEMENTS: REV1_ELEMENTS
 };
 
 // Top-level vars consumed by existing renderers — reassigned on every switchRev.
@@ -1114,6 +1307,15 @@ function switchRev(rev) {
   document.getElementById('supersededBanner').style.display = rev === 'superseded' ? 'block' : 'none';
   document.getElementById('dashboard-content').classList.toggle('is-superseded', rev === 'superseded');
 
+  const isSupplierView = data.viewMode === 'supplier';
+  document.getElementById('elementSummaryCard').style.display = isSupplierView ? 'none' : '';
+  document.getElementById('elementChartCard').style.display = isSupplierView ? 'none' : '';
+  document.getElementById('chartsSplit').classList.toggle('one-col', isSupplierView);
+  document.getElementById('breakdownTitle').textContent = isSupplierView ? 'Detailed Breakdown by Supplier' : 'Detailed Breakdown by Element';
+  document.getElementById('breakdownSub').innerHTML = isSupplierView
+    ? 'Click any supplier to expand quote line items &middot; Rev 1 issued 24 Jun 2026'
+    : 'Click any element to expand line items &middot; supplier shown per row';
+
   const vat = SUBTOTAL * 0.15;
   const tot = SUBTOTAL + vat;
   const rate = SUBTOTAL / GBA;
@@ -1123,6 +1325,11 @@ function switchRev(rev) {
   document.getElementById('met-rate').textContent = 'R ' + Math.round(rate).toLocaleString('en-ZA');
   document.getElementById('elsum-foot-total').textContent = fmtZAR(SUBTOTAL);
   document.getElementById('elsum-foot-rate').textContent = fmtZAR(rate);
+  document.getElementById('elsum-foot-vat').textContent = fmtZAR(vat);
+  document.getElementById('elsum-foot-vat-rate').textContent = fmtZAR(vat / GBA);
+  document.getElementById('elsum-foot-total-incl').textContent = fmtZAR(tot);
+  document.getElementById('elsum-foot-total-rate').textContent = fmtZAR(tot / GBA);
+  document.getElementById('elementCountLabel').textContent = ELEMENTS.length + ' elements · ' + GBA + ' m² GBA';
   document.getElementById('suptab-foot-total').textContent = fmtZAR(SUBTOTAL);
   document.getElementById('supplier-count-label').textContent = Object.keys(SUPPLIER_TOTALS).length + ' nominated parties';
 
