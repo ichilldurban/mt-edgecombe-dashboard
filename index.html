@@ -1023,13 +1023,13 @@ const _BASE_ELEMENTS = [
     id: '7.0', name: 'Fixed Joinery & Stonework',
     short: 'Fixed Joinery & Stonework', amount: 492530, colour: '#7c4a35', unit: 'm²', qty: 292,
     items: [
-      { ref: '7.1', desc: 'Bar installation &mdash; white melamine carcasses, melaply to water areas and plinths, PVC-clad plinths, curved shaker island panels, 22 mm supawood shaker doors, oak veneer monocoat shelves, mirror, Grass Novapro 1 soft-close, LED routering. Excludes brass foot rail.',
+      { ref: '6.1', desc: 'Bar installation &mdash; white melamine carcasses, melaply to water areas and plinths, PVC-clad plinths, curved shaker island panels, 22 mm supawood shaker doors, oak veneer monocoat shelves, mirror, Grass Novapro 1 soft-close, LED routering. Excludes brass foot rail.',
         unit: 'Sum', qty: 1, rate: 195700, amt: 195700, supplier: 'Kingston' },
-      { ref: '7.2', desc: '20 mm built-up Vanilla Noir Caesarstone 5100 &mdash; bar counter: higher and lower tops, splashback between lower and higher top and back counter',
+      { ref: '6.2', desc: '20 mm built-up Vanilla Noir Caesarstone 5100 &mdash; bar counter: higher and lower tops, splashback between lower and higher top and back counter',
         unit: 'Sum', qty: 1, rate: 149860, amt: 149860, supplier: 'Afrigran' },
-      { ref: '7.3', desc: 'Server (Buffet) installation &mdash; no carcasses, false panels in oak veneer monocoat, melaply plinths in monocoat, curved 22 mm oak veneer shaker panels, lower shelf in solid oak monocoat',
+      { ref: '6.3', desc: 'Server (Buffet) installation &mdash; no carcasses, false panels in oak veneer monocoat, melaply plinths in monocoat, curved 22 mm oak veneer shaker panels, lower shelf in solid oak monocoat',
         unit: 'Sum', qty: 1, rate: 82800, amt: 82800, supplier: 'Kingston' },
-      { ref: '7.4', desc: '50 mm mitre build-up Moorland Fog Caesarstone 6046 &mdash; server top (700 mm deep, or 800 mm with no build-up)',
+      { ref: '6.4', desc: '50 mm mitre build-up Moorland Fog Caesarstone 6046 &mdash; server top (700 mm deep, or 800 mm with no build-up)',
         unit: 'Sum', qty: 1, rate: 64170, amt: 64170, supplier: 'Afrigran' }
     ]
   },
@@ -1037,15 +1037,15 @@ const _BASE_ELEMENTS = [
     id: '8.0', name: 'Internal Wall Finishes',
     short: 'Internal Wall Finishes', amount: 21037.50, colour: '#9a8478', unit: 'm²', qty: 292,
     items: [
-      { ref: '8.1', desc: 'Internal paint to walls incl. bathroom walls', unit: 'm²', qty: 280.5, rate: 75, amt: 21037.50, supplier: 'DF Strang' }
+      { ref: '7.1', desc: 'Internal paint to walls incl. bathroom walls', unit: 'm²', qty: 280.5, rate: 75, amt: 21037.50, supplier: 'DF Strang' }
     ]
   },
   {
     id: '9.0', name: 'Blinds',
     short: 'Blinds', amount: 328188, colour: '#7a8a6e', unit: 'm²', qty: 292,
     items: [
-      { ref: '9.1', desc: 'Slidetrack Blind 2800 × 2200 mm — motorised package (fully installed, incl. motors, remotes, 50 mm posts, cleaner & installation)', unit: 'no', qty: 9, rate: 36465.33, amt: 328188, supplier: 'Cool Living', area: 'Dining Hall' },
-      { ref: '9.2', desc: 'Alternative — Manual (non-motorised) Slidetrack Blind package (pull stick & holder in lieu of motors) — not included in total', unit: 'no', qty: 9, rate: 28628.67, amt: 257658, supplier: 'Cool Living', area: 'Dining Hall', alternative: true }
+      { ref: '8.1', desc: 'Slidetrack Blind 2800 × 2200 mm — motorised package (fully installed, incl. motors, remotes, 50 mm posts, cleaner & installation)', unit: 'no', qty: 9, rate: 36465.33, amt: 328188, supplier: 'Cool Living', area: 'Dining Hall' },
+      { ref: '8.2', desc: 'Alternative — Manual (non-motorised) Slidetrack Blind package (pull stick & holder in lieu of motors) — not included in total', unit: 'no', qty: 9, rate: 28628.67, amt: 257658, supplier: 'Cool Living', area: 'Dining Hall', alternative: true }
     ]
   },
   {
@@ -1177,88 +1177,75 @@ const REV1_ELEMENTS = [
     ]
   },
   {
-    id: '6', name: 'Cool Living',
-    short: 'Cool Living', amount: 257658, colour: '#3a8275',
-    unit: 'item', qty: 1,
-    quoteRef: 'CLDQ261302 (manual / non-motorised)',
-    items: [
-      { ref: '6.1', desc: 'Slidetrack Blind 2800 × 2200 mm — Outlook fabric, white powder coat, with pelmet',                  unit: 'no',   qty: 9,  rate: 24302, amt: 218718, supplier: 'Cool Living', area: 'Dining Hall' },
-      { ref: '6.2', desc: 'Pull stick & holder (manual operation, in lieu of motors)',                                          unit: 'no',   qty: 3,  rate: 790,   amt: 2370,   supplier: 'Cool Living', area: 'Dining Hall' },
-      { ref: '6.3', desc: '50 mm square post × 6 m',                                                                            unit: 'no',   qty: 18, rate: 1400,  amt: 25200,  supplier: 'Cool Living', area: 'Dining Hall' },
-      { ref: '6.4', desc: 'Blind cleaner',                                                                                      unit: 'no',   qty: 3,  rate: 190,   amt: 570,    supplier: 'Cool Living', area: 'Dining Hall' },
-      { ref: '6.5', desc: 'Delivery & installation',                                                                            unit: 'item', qty: 1,  rate: 10800, amt: 10800,  supplier: 'Cool Living', area: 'Dining Hall' }
-    ]
-  },
-  {
-    id: '7', name: 'CW Electrical',
+    id: '6', name: 'CW Electrical',
     short: 'CW Electrical', amount: 130775, colour: '#a3503b',
     unit: 'item', qty: 1,
     quoteRef: '3455 Revised (19 Jun 2026)',
     groupSupplier: 'CW Electrical',
     groups: [
       { title: 'Entrance / New Bar & Coffee Station', items: [
-        { ref: '7.1',  desc: 'Downlighter points — acoustic panels (entrance)',                                            qty: 12, rate: 345,  amt: 4140 },
-        { ref: '7.2',  desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 12, rate: 215,  amt: 2580 },
-        { ref: '7.3',  desc: 'LED strip light point — wooden panelling feature (entrance)',                                qty: 1,  rate: 895,  amt: 895  },
-        { ref: '7.4',  desc: '10 W warm-white solid-line LED strip + surface aluminium profile & perspex covers, 120 W 24 V driver', qty: 1, rate: 2395, amt: 2395 },
-        { ref: '7.5',  desc: 'Plug points — above counter (new bar)',                                                      qty: 3,  rate: 895,  amt: 2685 },
-        { ref: '7.6',  desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 3,  rate: 305,  amt: 915  },
-        { ref: '7.7',  desc: 'Plug point — fridges (new bar)',                                                             qty: 1,  rate: 895,  amt: 895  },
-        { ref: '7.8',  desc: 'Legrand Ysalis white double socket',                                                         qty: 1,  rate: 295,  amt: 295  },
-        { ref: '7.9',  desc: 'Downlighter points (new bar)',                                                               qty: 3,  rate: 345,  amt: 1035 },
-        { ref: '7.10', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 3,  rate: 215,  amt: 645  },
-        { ref: '7.11', desc: 'LED strip light points — bar shelves / cabinetry',                                           qty: 12, rate: 395,  amt: 4740 },
-        { ref: '7.12', desc: '10 W warm-white solid-line LED strip + flush aluminium profile & perspex covers, 200 W 24 V driver', qty: 1, rate: 2895, amt: 2895 },
-        { ref: '7.13', desc: 'Ceiling speaker points — relocated to new positions',                                        qty: 2,  rate: 295,  amt: 590  }
+        { ref: '6.1',  desc: 'Downlighter points — acoustic panels (entrance)',                                            qty: 12, rate: 345,  amt: 4140 },
+        { ref: '6.2',  desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 12, rate: 215,  amt: 2580 },
+        { ref: '6.3',  desc: 'LED strip light point — wooden panelling feature (entrance)',                                qty: 1,  rate: 895,  amt: 895  },
+        { ref: '6.4',  desc: '10 W warm-white solid-line LED strip + surface aluminium profile & perspex covers, 120 W 24 V driver', qty: 1, rate: 2395, amt: 2395 },
+        { ref: '6.5',  desc: 'Plug points — above counter (new bar)',                                                      qty: 3,  rate: 895,  amt: 2685 },
+        { ref: '6.6',  desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 3,  rate: 305,  amt: 915  },
+        { ref: '6.7',  desc: 'Plug point — fridges (new bar)',                                                             qty: 1,  rate: 895,  amt: 895  },
+        { ref: '6.8',  desc: 'Legrand Ysalis white double socket',                                                         qty: 1,  rate: 295,  amt: 295  },
+        { ref: '6.9',  desc: 'Downlighter points (new bar)',                                                               qty: 3,  rate: 345,  amt: 1035 },
+        { ref: '6.10', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 3,  rate: 215,  amt: 645  },
+        { ref: '6.11', desc: 'LED strip light points — bar shelves / cabinetry',                                           qty: 12, rate: 395,  amt: 4740 },
+        { ref: '6.12', desc: '10 W warm-white solid-line LED strip + flush aluminium profile & perspex covers, 200 W 24 V driver', qty: 1, rate: 2895, amt: 2895 },
+        { ref: '6.13', desc: 'Ceiling speaker points — relocated to new positions',                                        qty: 2,  rate: 295,  amt: 590  }
       ]},
       { title: 'Main Seated Area', items: [
-        { ref: '7.14', desc: 'Downlighter points — acoustic panels',                                                       qty: 72, rate: 345,  amt: 24840 },
-        { ref: '7.15', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 72, rate: 215,  amt: 15480 },
-        { ref: '7.16', desc: 'Ceiling fan points — wire / brace plus assemble and install',                                qty: 4,  rate: 795,  amt: 3180  },
-        { ref: '7.17', desc: 'Zebbies rattan ceiling fans plus remotes / batteries',                                       qty: 4,  rate: 5000, amt: 20000 },
-        { ref: '7.18', desc: 'Ceiling speaker points — relocated to new positions',                                        qty: 5,  rate: 295,  amt: 1475  },
-        { ref: '7.19', desc: 'Plug points — two booth seats',                                                              qty: 4,  rate: 895,  amt: 3580  },
-        { ref: '7.20', desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 4,  rate: 305,  amt: 1220  },
-        { ref: '7.21', desc: 'Plug points — mobile buffet table',                                                          qty: 2,  rate: 895,  amt: 1790  },
-        { ref: '7.22', desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 2,  rate: 305,  amt: 610   }
+        { ref: '6.14', desc: 'Downlighter points — acoustic panels',                                                       qty: 72, rate: 345,  amt: 24840 },
+        { ref: '6.15', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 72, rate: 215,  amt: 15480 },
+        { ref: '6.16', desc: 'Ceiling fan points — wire / brace plus assemble and install',                                qty: 4,  rate: 795,  amt: 3180  },
+        { ref: '6.17', desc: 'Zebbies rattan ceiling fans plus remotes / batteries',                                       qty: 4,  rate: 5000, amt: 20000 },
+        { ref: '6.18', desc: 'Ceiling speaker points — relocated to new positions',                                        qty: 5,  rate: 295,  amt: 1475  },
+        { ref: '6.19', desc: 'Plug points — two booth seats',                                                              qty: 4,  rate: 895,  amt: 3580  },
+        { ref: '6.20', desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 4,  rate: 305,  amt: 1220  },
+        { ref: '6.21', desc: 'Plug points — mobile buffet table',                                                          qty: 2,  rate: 895,  amt: 1790  },
+        { ref: '6.22', desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 2,  rate: 305,  amt: 610   }
       ]},
       { title: 'Slanted-Ceiling Glass Verandah Seated Area', items: [
-        { ref: '7.23', desc: 'Downlighter points — acoustic panels',                                                       qty: 24, rate: 345,  amt: 8280  },
-        { ref: '7.24', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 24, rate: 215,  amt: 5160  },
-        { ref: '7.25', desc: 'Auto blind 15 A single plug points',                                                         qty: 7,  rate: 795,  amt: 5565  }
+        { ref: '6.23', desc: 'Downlighter points — acoustic panels',                                                       qty: 24, rate: 345,  amt: 8280  },
+        { ref: '6.24', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 24, rate: 215,  amt: 5160  },
+        { ref: '6.25', desc: 'Auto blind 15 A single plug points',                                                         qty: 7,  rate: 795,  amt: 5565  }
       ]},
       { title: 'New Server', items: [
-        { ref: '7.26', desc: 'Plug points — counter / wall',                                                               qty: 4,  rate: 895,  amt: 3580  },
-        { ref: '7.27', desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 4,  rate: 305,  amt: 1220  },
-        { ref: '7.28', desc: 'Downlighter points — acoustic panels',                                                       qty: 7,  rate: 345,  amt: 2415  },
-        { ref: '7.29', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 7,  rate: 215,  amt: 1505  },
-        { ref: '7.30', desc: 'LED strip light point — granite overhang serving counter',                                   qty: 1,  rate: 895,  amt: 895   },
-        { ref: '7.31', desc: '10 W warm-white solid-line LED strip + flush aluminium profile & perspex covers, 200 W 24 V driver', qty: 1, rate: 2650, amt: 2650 }
+        { ref: '6.26', desc: 'Plug points — counter / wall',                                                               qty: 4,  rate: 895,  amt: 3580  },
+        { ref: '6.27', desc: 'Legrand Ysalis white three-pin / two-pin combo sockets',                                     qty: 4,  rate: 305,  amt: 1220  },
+        { ref: '6.28', desc: 'Downlighter points — acoustic panels',                                                       qty: 7,  rate: 345,  amt: 2415  },
+        { ref: '6.29', desc: 'White downlighter fittings + 9 W CCT GU10 LED lamps and LED lampholders',                    qty: 7,  rate: 215,  amt: 1505  },
+        { ref: '6.30', desc: 'LED strip light point — granite overhang serving counter',                                   qty: 1,  rate: 895,  amt: 895   },
+        { ref: '6.31', desc: '10 W warm-white solid-line LED strip + flush aluminium profile & perspex covers, 200 W 24 V driver', qty: 1, rate: 2650, amt: 2650 }
       ]},
       { title: 'General', items: [
-        { ref: '7.32', desc: 'Strip out and remove all electrical fittings from ceilings — boards removed, framework to remain', qty: 1, rate: 2625, amt: 2625 }
+        { ref: '6.32', desc: 'Strip out and remove all electrical fittings from ceilings — boards removed, framework to remain', qty: 1, rate: 2625, amt: 2625 }
       ]}
     ]
   },
   {
-    id: '8', name: 'GT Aluminium',
+    id: '7', name: 'GT Aluminium',
     short: 'GT Aluminium', amount: 95230, colour: '#8a98a3',
     unit: 'item', qty: 1,
     quoteRef: 'J13517 (24 Jun 2026)',
     items: [
-      { ref: '8.1', desc: '2-pane Palace sliding door with E-Track centre locking, fitted on inside of shopfront façade, 100 mm box section both sides, 12 fixeds + 2 sliders with arch stuck on in & out', unit: 'no',   qty: 1, rate: 64166.67, amt: 64166.67, supplier: 'GT Aluminium' },
-      { ref: '8.2', desc: 'Shopfront window — mullions with 38 mm flat stuck on horizontally in & out at 1000 mm from bottom + R4 — 10 fixeds',                                                              unit: 'no',   qty: 1, rate: 24833.33, amt: 24833.33, supplier: 'GT Aluminium' },
-      { ref: '8.3', desc: 'Shopfront window — mullions with 38 mm flat stuck on horizontally in & out at 1000 mm from bottom + R4 — 2 fixeds',                                                               unit: 'no',   qty: 1, rate: 6000,     amt: 6000,     supplier: 'GT Aluminium' },
-      { ref: '8.4', desc: 'Glazing certificate (issued on full settlement)',                                                                                                                                 unit: 'item', qty: 1, rate: 230,      amt: 230,      supplier: 'GT Aluminium' }
+      { ref: '7.1', desc: '2-pane Palace sliding door with E-Track centre locking, fitted on inside of shopfront façade, 100 mm box section both sides, 12 fixeds + 2 sliders with arch stuck on in & out', unit: 'no',   qty: 1, rate: 64166.67, amt: 64166.67, supplier: 'GT Aluminium' },
+      { ref: '7.2', desc: 'Shopfront window — mullions with 38 mm flat stuck on horizontally in & out at 1000 mm from bottom + R4 — 10 fixeds',                                                              unit: 'no',   qty: 1, rate: 24833.33, amt: 24833.33, supplier: 'GT Aluminium' },
+      { ref: '7.3', desc: 'Shopfront window — mullions with 38 mm flat stuck on horizontally in & out at 1000 mm from bottom + R4 — 2 fixeds',                                                               unit: 'no',   qty: 1, rate: 6000,     amt: 6000,     supplier: 'GT Aluminium' },
+      { ref: '7.4', desc: 'Glazing certificate (issued on full settlement)',                                                                                                                                 unit: 'item', qty: 1, rate: 230,      amt: 230,      supplier: 'GT Aluminium' }
     ]
   },
   {
-    id: '9', name: 'Tim Brooks Airconditioning',
+    id: '8', name: 'Tim Brooks Airconditioning',
     short: 'Tim Brooks', amount: 59900, colour: '#5b9aa0',
     unit: 'item', qty: 1,
     quoteRef: 'Q5601 (03 Mar 2026)',
     items: [
-      { ref: '9.1', desc: 'Supply and install 18 × replacement 600 × 600 mm ceiling diffusers (12 × supply air, 6 × return air with Thermoboard plenums and filters), custom-made steel powder-coated satin white per plan', unit: 'item', qty: 1, rate: 59900, amt: 59900, supplier: 'Tim Brooks' }
+      { ref: '8.1', desc: 'Supply and install 18 × replacement 600 × 600 mm ceiling diffusers (12 × supply air, 6 × return air with Thermoboard plenums and filters), custom-made steel powder-coated satin white per plan', unit: 'item', qty: 1, rate: 59900, amt: 59900, supplier: 'Tim Brooks' }
     ]
   }
 ];
@@ -1266,7 +1253,7 @@ const REV1_ELEMENTS = [
 const DATA_CURRENT = {
   label: 'Current',
   viewMode: 'supplier',
-  SUBTOTAL: 3231108.37,
+  SUBTOTAL: 2973450.37,
   GBA: GBA_BASE,
   ELEMENTS: REV1_ELEMENTS,
   meta: {
