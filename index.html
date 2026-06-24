@@ -493,6 +493,86 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
   .section { border: 1px solid #ccc; }
   footer { background: var(--green-dd) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+
+/* ============================================================
+   REVISION TABS — Current / Superseded
+   ============================================================ */
+.rev-tabs-wrap {
+  max-width: 1280px;
+  margin: 22px auto 0;
+  padding: 0 28px;
+}
+.rev-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid var(--border-d);
+}
+.rev-tab {
+  background: transparent;
+  border: 2px solid transparent;
+  border-bottom: 0;
+  padding: 11px 26px;
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border-top-left-radius: var(--rs);
+  border-top-right-radius: var(--rs);
+  margin-bottom: -2px;
+  transition: var(--t);
+}
+.rev-tab .rev-tag { font-size: 0.6rem; font-weight: 700; opacity: 0.7; margin-left: 8px; letter-spacing: 1px; }
+.rev-tab:hover { color: var(--green-d); background: var(--green-tint); }
+.rev-tab.active {
+  color: var(--green-dd);
+  background: var(--card);
+  border-color: var(--border-d);
+  position: relative;
+}
+.rev-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -2px;
+  height: 2px;
+  background: var(--card);
+}
+.superseded-banner {
+  max-width: 1280px;
+  margin: 16px auto 0;
+  padding: 14px 20px;
+  background: #fff4d6;
+  border: 1px solid #d4a83a;
+  border-left: 5px solid #b8862a;
+  color: #6b4d12;
+  font-size: 0.84rem;
+  border-radius: var(--rs);
+  display: none;
+}
+.superseded-banner strong { letter-spacing: 1.6px; font-weight: 800; }
+.superseded-banner a { color: #6b4d12; font-weight: 700; text-decoration: underline; cursor: pointer; }
+#dashboard-content { position: relative; }
+#dashboard-content.is-superseded::before {
+  content: 'SUPERSEDED';
+  position: absolute;
+  top: 240px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-14deg);
+  font-size: 9rem;
+  font-weight: 900;
+  letter-spacing: 0.6rem;
+  color: rgba(184,40,40,0.055);
+  pointer-events: none;
+  z-index: 0;
+  white-space: nowrap;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+@media print {
+  .rev-tabs-wrap { display: none; }
+  .superseded-banner { display: block !important; background: #fff4d6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
 </style>
 </head>
 <body>
@@ -602,26 +682,39 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
     </div>
   </div>
 
+  <!-- ===== REVISION TABS ===== -->
+  <div class="rev-tabs-wrap">
+    <div class="rev-tabs" role="tablist">
+      <button class="rev-tab active" data-rev="current" onclick="switchRev('current')" role="tab">Current <span class="rev-tag">Rev 1</span></button>
+      <button class="rev-tab" data-rev="superseded" onclick="switchRev('superseded')" role="tab">Superseded</button>
+    </div>
+  </div>
+  <div class="superseded-banner" id="supersededBanner">
+    <strong>SUPERSEDED</strong> &mdash; this view is retained for record only. Figures shown are not the working revision. Refer to the <a onclick="switchRev('current');return false">Current</a> tab for active numbers.
+  </div>
+
+  <div id="dashboard-content">
+
   <!-- ===== KEY METRICS ===== -->
   <div class="mg">
     <div class="m green">
       <div class="m-label">Sub-Total (ex VAT)</div>
-      <div class="m-value">R 2,509,332</div>
+      <div class="m-value" id="met-subtotal">R 2,509,332</div>
       <div class="m-sub">Net construction works estimate</div>
     </div>
     <div class="m dark">
       <div class="m-label">VAT @ 15%</div>
-      <div class="m-value">R 376,400</div>
+      <div class="m-value" id="met-vat">R 376,400</div>
       <div class="m-sub">Output VAT on works</div>
     </div>
     <div class="m yellow">
       <div class="m-label">Total (incl VAT)</div>
-      <div class="m-value">R 2,885,732</div>
+      <div class="m-value" id="met-total">R 2,885,732</div>
       <div class="m-sub">Anticipated final cost</div>
     </div>
     <div class="m">
       <div class="m-label">Rate per m&sup2; (ex VAT)</div>
-      <div class="m-value">R 8,594</div>
+      <div class="m-value" id="met-rate">R 8,594</div>
       <div class="m-sub">Across 292 m&sup2; GBA</div>
     </div>
   </div>
@@ -648,9 +741,9 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
       <tfoot>
         <tr class="subtotal-row">
           <td colspan="4"><strong>Sub-Total (excluding VAT)</strong></td>
-          <td class="r"><strong>R 2,509,332.49</strong></td>
+          <td class="r"><strong id="elsum-foot-total">R 2,509,332.49</strong></td>
           <td class="r"><strong>100.0%</strong></td>
-          <td class="r"><strong>R 8,593.61</strong></td>
+          <td class="r"><strong id="elsum-foot-rate">R 8,593.61</strong></td>
         </tr>
         <tr class="vat-row">
           <td colspan="4">VAT @ 15%</td>
@@ -683,7 +776,7 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
     <div class="card">
       <div class="card-h">
         <h2>Cost Split by Nominated Supplier</h2>
-        <span class="h-sub">8 nominated parties</span>
+        <span class="h-sub" id="supplier-count-label">8 nominated parties</span>
       </div>
       <div class="card-b">
         <div class="chart-wrap"><canvas id="supplierChart"></canvas></div>
@@ -712,7 +805,7 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
       <tfoot>
         <tr class="subtotal-row">
           <td colspan="3"><strong>Total (excluding VAT)</strong></td>
-          <td class="r"><strong>R 2,509,332.49</strong></td>
+          <td class="r"><strong id="suptab-foot-total">R 2,509,332.49</strong></td>
           <td class="r"><strong>100.0%</strong></td>
         </tr>
       </tfoot>
@@ -747,6 +840,8 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
       </ol>
     </div>
   </div>
+
+  </div><!-- /#dashboard-content -->
 
   <!-- ===== SIGNATURE BLOCK ===== -->
   <div class="sig-block">
@@ -788,9 +883,13 @@ footer .foot-meta .yellow-mark { color: var(--yellow); font-weight: 700; }
 <script>
 // ============================================================
 // DATA — ME 421 ESTIMATE (verbatim from xlsx)
+// Two revisions: SUPERSEDED (frozen original snapshot) and CURRENT (Rev 1 working).
+// Active dataset is selected via switchRev(); top-level vars below are reassigned
+// on each switch so the existing renderers (which reference SUBTOTAL/GBA/ELEMENTS/
+// SUPPLIER_TOTALS/SUPPLIER_COUNTS) keep working unchanged.
 // ============================================================
-const SUBTOTAL = 2509332.49;
-const GBA = 292;
+const SUBTOTAL_BASE = 2509332.49;
+const GBA_BASE = 292;
 
 const SUPPLIERS = {
   'DF Strang':       { colour: '#1a1a1a', accent: '#dcdc28', short: 'Builders' },
@@ -803,7 +902,7 @@ const SUPPLIERS = {
   'Tim Brooks':      { colour: '#5b9aa0', accent: '#7eb5bb', short: 'Air Con' }
 };
 
-const ELEMENTS = [
+const _BASE_ELEMENTS = [
   {
     id: '1.0', name: 'Alterations / Demolitions / Builders Works',
     short: 'Alterations & Builders Work', amount: 94300, colour: '#1a1a1a', unit: 'm²', qty: 292,
@@ -957,27 +1056,85 @@ const ELEMENTS = [
   }
 ];
 
-// Compute supplier totals from line items (single source of truth)
-const SUPPLIER_TOTALS = {};
-const SUPPLIER_COUNTS = {};
-ELEMENTS.forEach(el => {
-  if (el.items) {
-    el.items.forEach(it => {
-      const s = it.supplier;
-      if (!s) return;
-      if (it.alternative) return; // alternatives are informational only — not summed
-      SUPPLIER_TOTALS[s] = (SUPPLIER_TOTALS[s] || 0) + it.amt;
-      SUPPLIER_COUNTS[s] = (SUPPLIER_COUNTS[s] || 0) + 1;
-    });
-  }
-  if (el.groups) {
-    el.groups.forEach(g => g.items.forEach(it => {
-      const s = el.groupSupplier;
-      SUPPLIER_TOTALS[s] = (SUPPLIER_TOTALS[s] || 0) + it.amt;
-      SUPPLIER_COUNTS[s] = (SUPPLIER_COUNTS[s] || 0) + 1;
-    }));
-  }
-});
+// ============================================================
+// REVISIONS — Superseded (frozen) and Current (Rev 1, mutable)
+// ============================================================
+const DATA_SUPERSEDED = {
+  label: 'Superseded',
+  SUBTOTAL: SUBTOTAL_BASE,
+  GBA: GBA_BASE,
+  ELEMENTS: _BASE_ELEMENTS
+};
+const DATA_CURRENT = {
+  label: 'Current',
+  SUBTOTAL: SUBTOTAL_BASE,
+  GBA: GBA_BASE,
+  ELEMENTS: JSON.parse(JSON.stringify(_BASE_ELEMENTS))
+};
+
+// Top-level vars consumed by existing renderers — reassigned on every switchRev.
+let SUBTOTAL, GBA, ELEMENTS, SUPPLIER_TOTALS, SUPPLIER_COUNTS;
+let ACTIVE_REV = 'current';
+let elementChartInstance = null;
+let supplierChartInstance = null;
+
+function computeSupplierTotals(data) {
+  const totals = {}, counts = {};
+  data.ELEMENTS.forEach(el => {
+    if (el.items) {
+      el.items.forEach(it => {
+        if (!it.supplier || it.alternative) return;
+        totals[it.supplier] = (totals[it.supplier] || 0) + it.amt;
+        counts[it.supplier] = (counts[it.supplier] || 0) + 1;
+      });
+    }
+    if (el.groups) {
+      el.groups.forEach(g => g.items.forEach(it => {
+        const s = el.groupSupplier;
+        if (!s) return;
+        totals[s] = (totals[s] || 0) + it.amt;
+        counts[s] = (counts[s] || 0) + 1;
+      }));
+    }
+  });
+  return { totals, counts };
+}
+
+function switchRev(rev) {
+  ACTIVE_REV = rev;
+  const data = rev === 'superseded' ? DATA_SUPERSEDED : DATA_CURRENT;
+  SUBTOTAL = data.SUBTOTAL;
+  GBA = data.GBA;
+  ELEMENTS = data.ELEMENTS;
+  const { totals, counts } = computeSupplierTotals(data);
+  SUPPLIER_TOTALS = totals;
+  SUPPLIER_COUNTS = counts;
+
+  document.querySelectorAll('.rev-tab').forEach(b => b.classList.toggle('active', b.dataset.rev === rev));
+  document.getElementById('supersededBanner').style.display = rev === 'superseded' ? 'block' : 'none';
+  document.getElementById('dashboard-content').classList.toggle('is-superseded', rev === 'superseded');
+
+  const vat = SUBTOTAL * 0.15;
+  const tot = SUBTOTAL + vat;
+  const rate = SUBTOTAL / GBA;
+  document.getElementById('met-subtotal').textContent = 'R ' + Math.round(SUBTOTAL).toLocaleString('en-ZA');
+  document.getElementById('met-vat').textContent = 'R ' + Math.round(vat).toLocaleString('en-ZA');
+  document.getElementById('met-total').textContent = 'R ' + Math.round(tot).toLocaleString('en-ZA');
+  document.getElementById('met-rate').textContent = 'R ' + Math.round(rate).toLocaleString('en-ZA');
+  document.getElementById('elsum-foot-total').textContent = fmtZAR(SUBTOTAL);
+  document.getElementById('elsum-foot-rate').textContent = fmtZAR(rate);
+  document.getElementById('suptab-foot-total').textContent = fmtZAR(SUBTOTAL);
+  document.getElementById('supplier-count-label').textContent = Object.keys(SUPPLIER_TOTALS).length + ' nominated parties';
+
+  if (elementChartInstance) { elementChartInstance.destroy(); elementChartInstance = null; }
+  if (supplierChartInstance) { supplierChartInstance.destroy(); supplierChartInstance = null; }
+
+  renderElementSummary();
+  renderElementChart();
+  renderSupplierChart();
+  renderSupplierTable();
+  renderSections();
+}
 
 // ============================================================
 // FORMATTERS
@@ -1032,7 +1189,7 @@ function renderElementSummary() {
 function renderElementChart() {
   const ctx = document.getElementById('elementChart').getContext('2d');
   const visible = ELEMENTS.filter(s => s.amount > 0);
-  new Chart(ctx, {
+  elementChartInstance = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: visible.map(s => s.short),
@@ -1073,7 +1230,7 @@ function renderElementChart() {
 function renderSupplierChart() {
   const entries = Object.entries(SUPPLIER_TOTALS).sort((a, b) => b[1] - a[1]);
   const ctx = document.getElementById('supplierChart').getContext('2d');
-  new Chart(ctx, {
+  supplierChartInstance = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: entries.map(e => e[0]),
@@ -1256,13 +1413,9 @@ function renderSections() {
 }
 
 // ============================================================
-// INIT
+// INIT — default to Current (Rev 1); Superseded retained for record
 // ============================================================
-renderElementSummary();
-renderElementChart();
-renderSupplierChart();
-renderSupplierTable();
-renderSections();
+switchRev('current');
 </script>
 </body>
 </html>
